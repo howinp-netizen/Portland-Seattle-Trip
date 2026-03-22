@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Day 1 · Seattle City + Bainbridge</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",sans-serif;background:#F1F5F9;color:#1E293B}
+
+/* ── HEADER ── */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(135deg,#1E3A8A,#2563EB);padding:10px 14px 0}
+.hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hdr-badge{background:rgba(255,255,255,.22);border-radius:7px;padding:3px 10px;font-size:11px;font-weight:800;color:#fff}
+.hdr-title{font-size:17px;font-weight:800;color:#fff}
+.hdr-sub{font-size:12px;color:rgba(255,255,255,.7);margin-top:1px}
+.tabs{display:flex;gap:2px}
+.tab{flex:1;padding:8px 2px;border:none;background:rgba(255,255,255,.14);color:rgba(255,255,255,.65);font-size:13px;font-weight:700;font-family:inherit;border-radius:7px 7px 0 0;cursor:pointer;transition:.15s;white-space:nowrap}
+.tab.on{background:#fff;color:#1E40AF}
+
+/* ── PANELS: visibility switching — layout always alive ── */
+.panels{position:fixed;top:120px;left:0;right:0;bottom:0}
+.panel{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;visibility:hidden;z-index:0}
+.panel.on{visibility:visible;z-index:10}
+
+/* ══════════ TAB 0 — OVERVIEW ══════════ */
+.ov-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px 32px;background:#F1F5F9}
+.ov-banner{background:linear-gradient(120deg,#1E3A8A,#2563EB);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;color:#fff}
+.ov-d{font-size:26px;font-weight:900;line-height:1}
+.ov-dt{font-size:12px;font-weight:800}
+.ov-ds{font-size:10px;opacity:.75;margin-top:2px}
+.timebar-wrap{background:#fff;border-radius:10px;padding:10px 14px;margin-bottom:10px}
+.timebar-lbl{font-size:9px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.timebar{display:flex;height:18px;border-radius:5px;overflow:hidden;gap:1px}
+.timebar-seg{cursor:pointer;transition:opacity .15s;min-width:3px}
+.timebar-seg:active{opacity:.7}
+.timebar-ends{display:flex;justify-content:space-between;margin-top:3px}
+.timebar-end{font-size:8px;color:#94A3B8;font-weight:600}
+.tl{position:relative;padding-left:56px;margin-top:4px}
+.tl::before{content:"";position:absolute;left:24px;top:8px;bottom:8px;width:2px;background:#E2E8F0;border-radius:1px}
+.tl-row{position:relative;margin-bottom:5px}
+.tl-axis{position:absolute;left:-56px;width:56px;display:flex;flex-direction:column;align-items:center;padding-top:10px}
+.tl-time{font-size:9px;font-weight:700;color:#94A3B8;white-space:nowrap;line-height:1}
+.tl-dot{width:11px;height:11px;border-radius:50%;margin-top:4px;border:2px solid #fff;flex-shrink:0}
+.tl-block{border-radius:9px;background:#fff;border-left:4px solid;overflow:hidden;cursor:pointer;transition:transform .12s}
+.tl-block:active{transform:scale(.98)}
+.tl-in{padding:8px 10px}
+.tl-head{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.tl-ico{font-size:14px;flex-shrink:0}
+.tl-name{font-size:17px;font-weight:800;flex:1;line-height:1.2}
+.tl-pills{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:3px}
+.tl-pill{font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;white-space:nowrap}
+.tl-best{font-size:15px;color:#475569;line-height:1.4;margin-top:3px}
+.tl-hint{font-size:11px;color:#94A3B8;margin-top:3px;font-weight:600}
+.dur-bar{height:3px;border-radius:2px;margin-top:5px;opacity:.3}
+
+/* ══════════ TAB 1 — MAP ══════════ */
+.deck-wrap{flex-shrink:0;background:#fff;border-bottom:1px solid #E2E8F0;overflow:hidden;touch-action:pan-y}
+.deck{display:flex;will-change:transform;transition:transform .34s cubic-bezier(.4,0,.2,1)}
+.sc{min-width:100%;padding:10px 14px}
+.sc-time{font-size:12px;font-weight:700;color:#94A3B8;margin-bottom:3px}
+.sc-head{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.sc-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.sc-name{font-size:17px;font-weight:800;flex:1;line-height:1.2}
+.sc-cat{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.sc-desc{font-size:15px;color:#64748B;line-height:1.5;margin-bottom:7px}
+.sc-row{display:flex;align-items:center;gap:5px}
+.sc-btns{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+.deck-dots{display:flex;justify-content:center;gap:4px;padding:6px 0;background:#fff;border-bottom:1px solid #E2E8F0;flex-shrink:0}
+.dot{width:6px;height:6px;border-radius:50%;background:#E2E8F0;cursor:pointer;transition:.18s}
+.dot.on{background:#2563EB;transform:scale(1.4)}
+.mini-wrap{background:#fff;border-bottom:1px solid #E2E8F0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:7px 10px;flex-shrink:0}
+.mini-wrap::-webkit-scrollbar{display:none}
+.mini-row{display:flex;align-items:flex-start;width:max-content}
+.mini-stop{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:0 3px}
+.mini-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;border:2px solid transparent;transition:.18s;flex-shrink:0}
+.mini-num.on{border-color:#1E293B;transform:scale(1.15)}
+.mini-lbl{font-size:7.5px;color:#94A3B8;text-align:center;width:50px;line-height:1.2;font-weight:600;word-break:keep-all}
+.mini-lbl.on{color:#1E293B;font-weight:800}
+.mini-arr{font-size:9px;color:#CBD5E1;padding:7px 1px 0;flex-shrink:0}
+.map-box{flex:1;position:relative;background:#E8EDF2}
+.map-box iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.map-spin{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#94A3B8;font-weight:600;pointer-events:none}
+.route-btn{position:absolute;top:12px;right:12px;z-index:25;background:rgba(37,99,235,.92);color:#fff;border:none;border-radius:22px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(37,99,235,.4);letter-spacing:.3px}
+.route-btn.on{background:#2563EB;color:#fff}
+
+/* ══════════ TAB 2 — SCHEDULE ══════════ */
+.sched-row{flex:1;display:flex;overflow:hidden;background:#F1F5F9}
+.slider-col{width:52px;flex-shrink:0;background:#fff;border-right:1px solid #E2E8F0;display:flex;flex-direction:column;align-items:center;padding:12px 0;touch-action:none;user-select:none;-webkit-user-select:none}
+.sl-lbl{font-size:9px;font-weight:700;color:#94A3B8;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px}
+.track-area{flex:1;width:100%;position:relative}
+.track-bg{position:absolute;left:50%;top:10px;bottom:10px;width:3px;background:#E2E8F0;border-radius:2px;transform:translateX(-50%)}
+.track-fill{position:absolute;left:50%;top:10px;width:3px;background:#2563EB;border-radius:2px;transform:translateX(-50%);height:0;will-change:height}
+.stk{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;transform:translateY(-50%);cursor:pointer;z-index:3}
+.stk-dot{border-radius:50%;background:#CBD5E1;border:2px solid #fff;transition:background .15s,transform .15s;flex-shrink:0}
+.stk-dot.on{background:#2563EB;box-shadow:0 0 0 3px #BFDBFE;transform:scale(1.35)}
+.stk-lbl{font-size:8px;font-weight:700;color:#94A3B8;margin-top:2px;white-space:nowrap;transition:color .15s;text-align:center;line-height:1.1}
+.stk-lbl.on{color:#1D4ED8}
+.thumb{position:absolute;left:50%;width:42px;height:42px;border-radius:50%;background:#1D4ED8;border:3px solid #fff;box-shadow:0 3px 14px rgba(29,78,216,.4);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;line-height:1.25;text-align:center;z-index:20;touch-action:none;cursor:grab;will-change:transform}
+.thumb.drag{cursor:grabbing;box-shadow:0 6px 20px rgba(29,78,216,.55)}
+.cards-col{flex:1;overflow:hidden;position:relative}
+.cards-inner{background:#F1F5F9;position:absolute;inset:0;will-change:transform}
+.cards-inner.anim{transition:transform .32s cubic-bezier(.4,0,.2,1)}
+.ev-card{position:absolute;left:10px;right:10px;top:0;border-radius:14px;background:#fff;border:2px solid #E2E8F0;display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.ev-card.on{border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.card-hd{padding:12px 14px 10px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid #F1F5F9;flex-shrink:0;cursor:pointer}
+.card-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.card-meta{flex:1;min-width:0}
+.card-name{font-size:18px;font-weight:800;line-height:1.25;margin-bottom:3px}
+.card-tr{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:4px}
+.card-time{font-size:13px;color:#64748B;font-weight:700}
+.card-dur{font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px}
+.card-cat{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px}
+.card-nav{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;align-self:center}
+.nav-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid #E2E8F0;background:#F8FAFC;display:flex;align-items:center;justify-content:center;font-size:13px;color:#64748B;cursor:pointer;transition:background .15s,transform .1s;touch-action:manipulation}
+.nav-btn:active{background:#E2E8F0;transform:scale(.9)}
+.nav-btn.dim{opacity:.2;pointer-events:none}
+.card-body{padding:11px 14px 28px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;overscroll-behavior:contain}
+.card-desc{font-size:14px;color:#475569;line-height:1.65;margin-bottom:10px}
+.hl-block{background:#F8FAFC;border-radius:9px;padding:9px 12px;margin-bottom:10px}
+.hl-ttl{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.hl-row{display:flex;gap:6px;font-size:15px;line-height:1.5;margin-bottom:4px;color:#334155}
+.hl-row:last-child{margin-bottom:0}
+.hl-i{flex-shrink:0;font-size:12px}
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.chip{font-size:14px;font-weight:600;border-radius:999px;padding:3px 10px;background:#F1F5F9;color:#475569}
+.chip.cost{background:#ECFDF5;color:#065F46}
+.chip.warn{background:#FEF2F2;color:#991B1B;font-weight:700}
+.card-btns{display:flex;gap:5px;flex-wrap:wrap}
+.card-foot{padding:6px 14px 10px;flex-shrink:0;border-top:1px solid #F1F5F9;background:#fff;border-radius:0 0 14px 14px;display:flex;flex-direction:column;gap:6px}
+.card-btns-row{display:flex;gap:5px;flex-wrap:wrap}
+.card-nav-row{display:flex;align-items:center;justify-content:space-between;padding-top:4px;border-top:1px solid #F1F5F9}
+.card-nav-btn{background:none;border:none;color:#2563EB;font-size:13px;font-weight:600;padding:4px 8px;cursor:pointer;border-radius:6px}
+.card-nav-btn:active{background:#EFF6FF}
+.card-nav-btn.dim{color:#CBD5E1;pointer-events:none}
+.card-nav-idx{font-size:12px;color:#94A3B8;font-weight:500}
+.btn{display:inline-flex;align-items:center;gap:3px;border:none;border-radius:7px;padding:9px 13px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-blue{background:#2563EB;color:#fff}
+.btn-green{background:#16A34A;color:#fff}
+.btn-purple{background:#7C3AED;color:#fff}
+.btn-amber{background:#D97706;color:#fff}
+.btn-gray{background:#F1F5F9;color:#475569;border:1.5px solid #E2E8F0}
+
+/* ══════════ PHOTO POPUP ══════════ */
+.overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.82);align-items:flex-end;justify-content:center}
+.overlay.on{display:flex}
+.popup{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:520px;height:88vh;display:flex;flex-direction:column;overflow:hidden;animation:popUp .26s ease}
+@keyframes popUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* drag-to-close header */
+.pop-hd{flex-shrink:0;background:#fff;padding:8px 14px 10px;border-bottom:1px solid #F1F5F9;touch-action:none;user-select:none;cursor:grab}
+.pop-drag-bar{width:36px;height:4px;border-radius:2px;background:#E2E8F0;margin:0 auto 8px}
+.pop-hd-row{display:flex;align-items:center;justify-content:space-between}
+.pop-ttl{font-size:14px;font-weight:800}
+.pop-x{width:28px;height:28px;border-radius:50%;background:#F1F5F9;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#64748B}
+
+/* photo section — resizable */
+.photo-section{display:none}
+
+
+
+.photo-slide img{width:100%;object-fit:cover;display:block;background:#E2E8F0}
+
+
+
+
+
+
+
+.pdot.on{background:#2563EB;transform:scale(1.3)}
+
+/* drag handle between photo and info */
+
+
+
+/* info area */
+.info-area{flex:1;display:flex;overflow:hidden;min-height:0}
+
+/* left: poi list — text only, no emoji */
+.pop-left{
+  width:80px;flex-shrink:0;
+  background:#F8FAFC;border-right:1px solid #F1F5F9;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:4px 0;
+}
+.poi-item{
+  padding:9px 8px;cursor:pointer;
+  border-left:3px solid transparent;
+  transition:background .15s,border-color .15s;
+}
+.poi-item.on{background:#EFF6FF;border-left-color:#2563EB}
+.poi-item-name{font-size:12px;font-weight:600;font-size:9px;font-weight:700;color:#64748B;line-height:1.35;word-break:keep-all}
+.poi-item.on .poi-item-name{font-size:12px;font-weight:600;color:#1E40AF;font-weight:800}
+.poi-item-num{font-size:8px;color:#94A3B8;margin-top:3px}
+.poi-item.on .poi-item-num{color:#2563EB}
+.poi-sep{height:1px;background:#F1F5F9}
+
+/* right: detail slides */
+.poi-num{font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.poi-name{font-size:17px;font-weight:800;color:#1E293B;margin-bottom:8px;line-height:1.3}
+.poi-desc{font-size:16px;color:#475569;line-height:1.7;margin-bottom:12px}
+.poi-link{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#2563EB;text-decoration:none;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:7px;padding:6px 12px}
+.poi-link:active{background:#DBEAFE}
+
+/* RIGHT PANEL: absolute overlay slides */
+.pop-right{flex:1;position:relative;overflow:hidden}
+.poi-slide{
+  position:absolute;inset:0;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:12px 14px 20px;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s;
+}
+.poi-slide.active{opacity:1;pointer-events:auto}
+
+.google-search-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:10px;padding:8px 13px;
+  background:#4285F4;color:#fff;border-radius:20px;
+  font-size:13px;font-weight:600;text-decoration:none;
+  box-shadow:0 2px 6px rgba(66,133,244,.35);
+}
+.google-search-btn:active{opacity:.8}
+
+/* ── INLINE PHOTO STRIP ── */
+.ph-strip{display:flex;gap:6px;margin:10px 0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ph-strip::-webkit-scrollbar{display:none}
+.ph-thumb{flex-shrink:0;width:90px;height:68px;border-radius:8px;object-fit:cover;background:#E2E8F0;cursor:pointer;border:2px solid transparent;transition:border-color .15s}
+.ph-thumb:active{border-color:#2563EB;opacity:.85}
+.ph-thumb.loading{background:linear-gradient(90deg,#E2E8F0 25%,#F1F5F9 50%,#E2E8F0 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.ph-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.ph-lightbox img{max-width:100%;max-height:90vh;border-radius:10px;object-fit:contain}
+.ph-lightbox-close{position:absolute;top:16px;right:18px;color:#fff;font-size:26px;cursor:pointer;z-index:10000}
+
+/* ── CARD SCROLL FADE HINT ── */
+.card-body-wrap{position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
+.card-body-wrap::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:32px;
+  background:linear-gradient(transparent,rgba(255,255,255,.95));
+  pointer-events:none;border-radius:0 0 4px 4px;
+  transition:opacity .2s;
+}
+.card-body-wrap.scrolled-end::after{opacity:0}
+.card-body{padding:11px 14px 28px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;overscroll-behavior:contain}
+
+/* ── CARD EXPAND VIEW ── */
+.ce-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(15,23,42,.7);animation:ceFadeIn .18s ease}
+.ce-overlay.on{display:flex;align-items:flex-end;justify-content:center}
+@keyframes ceFadeIn{from{opacity:0}to{opacity:1}}
+.ce-box{width:100%;max-width:520px;height:92vh;background:#fff;border-radius:20px 20px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:ceSlideUp .22s cubic-bezier(.4,0,.2,1)}
+@keyframes ceSlideUp{from{transform:translateY(60px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.ce-hd{padding:14px 16px 12px;display:flex;align-items:center;gap:11px;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+.ce-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ce-meta{flex:1;min-width:0}
+.ce-name{font-size:17px;font-weight:800;color:#1E293B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ce-time{font-size:13px;color:#64748B;margin-top:2px}
+.ce-close{background:none;border:none;font-size:20px;color:#94A3B8;padding:4px 8px;cursor:pointer}
+.ce-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;overscroll-behavior:contain}
+.ce-body .card-desc{font-size:15px;color:#334155;line-height:1.6;margin-bottom:14px}
+.ce-body .hl-block{margin-bottom:14px}
+.ce-body .hl-ttl{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.ce-body .hl-row{display:flex;gap:8px;font-size:14px;line-height:1.55;margin-bottom:5px;color:#334155}
+.ce-body .hl-i{flex-shrink:0;width:18px;color:#F59E0B}
+.ce-body .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.ce-body .chip{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:20px;padding:4px 10px;font-size:12px;color:#475569}
+.ce-body .chip.cost{background:#FFF7ED;border-color:#FED7AA;color:#9A3412}
+.ce-foot{padding:10px 16px 20px;flex-shrink:0;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-wrap:wrap;background:#fff}
+.ce-nav{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 4px;flex-shrink:0;border-bottom:1px solid #F1F5F9}
+.ce-nav-btn{background:none;border:none;color:#2563EB;font-size:14px;font-weight:700;padding:6px 10px;cursor:pointer;border-radius:8px}
+.ce-nav-btn:active{background:#EFF6FF}
+.ce-nav-btn.dim{color:#CBD5E1;pointer-events:none}
+.ce-nav-idx{font-size:13px;color:#94A3B8;font-weight:500}
+
+
+
+
+/* ── CARD HEADER UPDATES ── */
+.card-hd-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:3px}
+.card-expand-mini{background:none;border:none;color:#2563EB;font-size:12px;font-weight:600;
+  padding:2px 6px;cursor:pointer;white-space:nowrap;flex-shrink:0;opacity:.8}
+.card-expand-mini:active{opacity:1}
+.card-cat-inline{font-size:11px;font-weight:600;padding:2px 7px;border-radius:10px;flex-shrink:0}
+.card-chips-inline{display:flex;gap:4px;flex-wrap:wrap;padding:4px 14px 6px;flex-shrink:0}
+.card-chips-inline .chip{font-size:12px;padding:3px 8px}
+
+/* ── HIGHLIGHT ACCORDION ── */
+.hl-row{display:flex;flex-direction:column;gap:0;font-size:13px;line-height:1.5;padding:5px 0;
+  border-bottom:1px solid #F1F5F9;cursor:pointer;position:relative}
+.hl-row:last-child{border-bottom:none}
+.hl-row-top{display:flex;align-items:center;gap:6px}
+.hl-i{flex-shrink:0;width:16px;color:#F59E0B;font-size:13px}
+.hl-t{color:#334155;font-weight:600;flex:1;min-width:0}
+.hl-arr{flex-shrink:0;color:#CBD5E1;font-size:13px;transition:transform .2s;margin-left:2px}
+.hl-row.open .hl-arr{transform:rotate(90deg)}
+.hl-detail{display:none;color:#64748B;font-size:12px;padding:4px 0 2px 22px;line-height:1.55}
+.hl-row.open .hl-detail{display:block}
+.hl-tips{margin-top:6px;padding-top:6px;border-top:1px solid #F1F5F9}
+.hl-tip{font-size:12px;color:#64748B;line-height:1.5;padding:2px 0}
+
+.ce-hl-row{display:flex;gap:8px;font-size:14px;line-height:1.55;padding:4px 0;color:#334155;border-bottom:1px solid #F8FAFC}
+.ce-hl-row:last-child{border-bottom:none}
+
+.card-hours{font-size:12px;color:#0369A1;background:#EFF6FF;border-radius:6px;padding:4px 10px;
+  margin-bottom:5px;font-weight:500;line-height:1.4}
+.ce-hours{font-size:13px;color:#0369A1;background:#EFF6FF;border-radius:8px;padding:6px 12px;
+  margin-bottom:10px;font-weight:500;line-height:1.4}
+
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-badge">DAY 3</div>
+    <div>
+      <div class="hdr-title">Seattle City + Bainbridge</div>
+      <div class="hdr-sub">April 17 (Thu) · 9 stops</div>
+    </div>
+  </div>
+  <div class="day-nav-bar">
+    <button class="day-nav-arrow" id="dayPrev" onclick="gotoDay(2)">‹</button>
+    <div class="day-nav-center">
+      <div class="day-nav-label">Day 3 / 4</div>
+      <div class="day-nav-sub">April 15 · Seattle City + Bainbridge</div>
+    </div>
+    <button class="day-nav-arrow" id="dayNext" onclick="gotoDay(4)">›</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="showTab(0)">📋 전체 일정</button>
+    <button class="tab"    onclick="showTab(1)">🗺 지도</button>
+    <button class="tab"    onclick="showTab(2)">📍 상세정보</button>
+  </div>
+</div>
+
+<div class="panels">
+  <!-- TAB 0: OVERVIEW -->
+  <div class="panel on" id="pan0">
+    <div class="ov-scroll" id="ovScroll"></div>
+  </div>
+
+  <!-- TAB 1: MAP -->
+  <div class="panel" id="pan1">
+    <div class="deck-wrap" id="deckWrap"><div class="deck" id="deck"></div></div>
+    <div class="deck-dots" id="dots"></div>
+    <div class="mini-wrap"><div class="mini-row" id="mini"></div></div>
+    <div class="map-box" id="mapBox">
+      <div class="map-spin" id="mapSpin">지도 불러오는 중…</div>
+      <iframe id="mapIframe" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <button class="route-btn" id="routeBtn" onclick="toggleRoute()">🗺 전체 동선</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: SCHEDULE -->
+  <div class="panel" id="pan2">
+    <div class="sched-row">
+      <div class="slider-col">
+        <div class="sl-lbl">시간</div>
+        <div class="track-area" id="trackArea">
+          <div class="track-bg"></div>
+          <div class="track-fill" id="fill"></div>
+          <div class="thumb" id="thumb"></div>
+        </div>
+      </div>
+      <div class="cards-col" id="cardsCol">
+        <div class="cards-inner" id="cardsInner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HIGHLIGHT POPUP -->
+<div class="overlay" id="overlay">
+  <div class="popup" id="popupBox">
+    <div class="pop-hd" id="popHd">
+      <div class="pop-drag-bar"></div>
+      <div class="pop-hd-row">
+        <span class="pop-ttl" id="popTtl"></span>
+        <button class="pop-x" id="popX">✕</button>
+      </div>
+    </div>
+    <div class="info-area">
+      <div class="pop-left"  id="popLeft"></div>
+      <div class="pop-right" id="popRight"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- CARD EXPAND VIEW -->
+<div class="ce-overlay" id="ceOverlay">
+  <div class="ce-box" id="ceBox">
+    <div class="ce-hd">
+      <div class="ce-icon" id="ceIcon"></div>
+      <div class="ce-meta">
+        <div class="ce-name" id="ceName"></div>
+        <div class="ce-time" id="ceTime"></div>
+      </div>
+      <button class="ce-close" id="ceClose" onclick="closeCardExpand()">✕</button>
+    </div>
+    <div class="ce-nav" id="ceNav"></div>
+    <div class="ce-body" id="ceBody"></div>
+    <div class="ce-foot" id="ceFoot"></div>
+  </div>
+</div>
+
+<script>
+const EVS=[
+ {
+  start:'10:00',end:'10:35',dur:35,icon:'⛴',name:'Ferry to Bainbridge Island',
+  cat:'이동',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJKxjxPWtBkFQRtP7KQoJExbA',mapQ:'Seattle+Ferry+Terminal+Pier+52',
+  lat:47.6024,lng:-122.3386,
+  desc:'Pier 52 워싱턴 주립 페리 탑승. 편도 약 35분. 퓨젯사운드에서 시애틀 스카이라인·Space Needle·Mt. Rainier 조망.',
+  hl:[
+   {i:'★',t:'시애틀 스카이라인 뷰 — 출항 직후 뒤돌아보면 Space Needle 전경',q:'Seattle ferry Puget Sound skyline Space Needle view'},
+   {i:'▸',t:'창가 자리 선점 — 오른쪽(북쪽) 자리가 스카이라인 뷰 최고',q:'Washington State Ferry inside window seat view'},
+   {i:'💡',t:'차는 호텔에 두고 도보 탑승 강력 추천 — 왕복 $9/인'},
+   {i:'💡',t:'터미널 인근 U-Park Lot(801 Western Ave) 주차 $10–15/일'},
+  ],
+  cost:'왕복 $9/인',tr:'도보 → 페리',note:'',
+  hours:'매일 운행 · 첫 배 5:30am · 시간표 확인 필수',
+  photos:[],
+ },
+ {
+  start:'10:35',end:'12:30',dur:115,icon:'🏘',name:'Bainbridge Island — Winslow',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJOVFYJC1mkVQRB6OkSWJiBWc',mapQ:'Winslow+Way+Bainbridge+Island',
+  lat:47.6247,lng:-122.5194,
+  desc:'페리 터미널에서 도보 8분. 아기자기한 카페·서점·기념품숍·갤러리. 조용하고 깔끔한 아일랜드 분위기.',
+  hl:[
+   {i:'★',t:'Bainbridge Island Museum of Art — 무료 입장 현대미술관',q:'Bainbridge Island Museum of Art BIMA gallery'},
+   {i:'▸',t:'Eagle Harbor Book Co. — 독립 서점, 로컬 아이템 구경',q:'Eagle Harbor Book Company Bainbridge Island bookstore'},
+   {i:'▸',t:'Winslow Way 카페 거리 — 로컬 카페에서 커피 한 잔',q:'Winslow Way Bainbridge Island cafe coffee'},
+   {i:'💡',t:'차 없이 도보 탐방 — 페리 터미널에서 마을까지 도보 8분'},
+  ],
+  cost:'무료 입장 / 쇼핑 개인',tr:'도보',note:'',
+  hours:'박물관 수–일 10am–5pm · 상점 대부분 10am–6pm',
+  photos:[],
+ },
+ {
+  start:'12:30',end:'13:30',dur:60,icon:'🍽',name:'Lunch — Bainbridge Island',
+  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
+  pid:'ChIJJwVLtixmkVQRV3UZ5h0Bk7s',mapQ:'Restaurants+Winslow+Way+Bainbridge+Island',
+  lat:47.6247,lng:-122.5194,
+  desc:'Winslow Way 현지 식당. 신선한 시푸드 샌드위치·수프 등 아일랜드 현지식 추천.',
+  hl:[
+   {i:'★',t:'Harbour Public House — 아일랜드 대표 펍, 시푸드 버거',q:'Harbour Public House Bainbridge Island seafood burger'},
+   {i:'▸',t:'Blackbird Bakery — 홈메이드 베이커리·샌드위치·수프',q:'Blackbird Bakery Bainbridge Island'},
+   {i:'💡',t:'성수기엔 줄 길 수 있음 — 도착하자마자 바로 이동 추천'},
+  ],
+  cost:'$20–35/인',tr:'도보',note:'',
+  hours:'상점마다 상이 · 대부분 11am–9pm',
+  photos:[],
+ },
+ {
+  start:'13:30',end:'14:05',dur:35,icon:'⛴',name:'Ferry back to Seattle',
+  cat:'이동',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJOVFYJC1mkVQRB6OkSWJiBWc',mapQ:'Bainbridge+Island+Ferry+Terminal',
+  lat:47.6229,lng:-122.5131,
+  desc:'귀환 페리 탑승. 약 35분. 시애틀 스카이라인이 점점 가까워지는 뷰가 일품.',
+  hl:[
+   {i:'★',t:'접근하는 시애틀 뷰 — 입항 시 다운타운 풀뷰 포착',q:'Seattle ferry approaching downtown skyline arriving'},
+   {i:'💡',t:'왕복 티켓 — 귀환 시 추가 결제 없음'},
+  ],
+  cost:'왕복 티켓 포함',tr:'페리',note:'',
+  hours:'매일 운행 · 시간표 확인 필수',
+  photos:[],
+ },
+ {
+  start:'14:05',end:'15:30',dur:85,icon:'🐟',name:'Pike Place Market',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJPZnomhpBkFQRak2oDAkWzSc',mapQ:'Pike+Place+Market+Seattle',
+  lat:47.6085,lng:-122.3421,
+  desc:'Day 1에서 저녁에 봤다면 오늘은 낮에 더 여유롭게. 생선 던지기·오리지널 스타벅스·신선 과일·꽃·수공예품.',
+  hl:[
+   {i:'★',t:'Pike Place Fish Co. — 생선 공중 던지기 퍼포먼스 (1930년 창업)',q:'Pike Place Fish Co fish throwing flying fish market Seattle'},
+   {i:'★',t:'Rachel the Pig — 입구 청동 돼지 저금통, 만지면 행운',q:'Rachel the Pig bronze piggy bank Pike Place Market Seattle'},
+   {i:'▸',t:'Original Starbucks — 1912 Pike Pl, 세계 1호점 (1971년 개점)',q:'Original Starbucks 1912 Pike Place first store 1971 Seattle'},
+   {i:'▸',t:'Post Alley Gum Wall — 지하 골목 껌 아트 명소 (1993년~)',q:'Post Alley Gum Wall Pike Place Seattle underground alley'},
+  ],
+  cost:'무료 입장 / 쇼핑 개인',tr:'도보 (Pier 52에서 10분)',note:'',
+  hours:'매일 9am–6pm (상점마다 상이)',
+  photos:[],
+ },
+ {
+  start:'15:30',end:'16:30',dur:60,icon:'🧌',name:'Fremont Troll',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJWbkFPCcVkFQRn7RWA5XksFo',mapQ:'Fremont+Troll+Seattle',
+  lat:47.6510,lng:-122.3473,
+  desc:'다리 밑 거대 트롤 조각상. 실제 VW 비틀을 움켜쥔 공공예술. 사진 명소. Fremont 이색 카페·숍 탐방.',
+  hl:[
+   {i:'★',t:'Fremont Troll — VW 비틀 움켜쥔 18톤 콘크리트 트롤',q:'Fremont Troll Seattle statue under bridge VW beetle'},
+   {i:'▸',t:'Fremont Sunday Market — 주말 오픈마켓 (4/17 목요일은 없음)',q:'Fremont neighborhood Seattle quirky shops cafes'},
+   {i:'💡',t:'Pike Place에서 우버 $12–18 추천 · 도보 불가 거리'},
+  ],
+  cost:'무료',tr:'우버 $12–18',note:'',
+  photos:[],
+ },
+ {
+  start:'16:30',end:'17:30',dur:60,icon:'🎡',name:'Seattle Great Wheel',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJoRFLBhpBkFQREoHV3kF2lME',mapQ:'Seattle+Great+Wheel',
+  lat:47.6059,lng:-122.3419,
+  desc:'워터프론트 대관람차. 약 12–20분간 3바퀴 회전. Elliott Bay 해안 전망. 일몰 타이밍 맞추면 황금빛 야경 최고.',
+  hl:[
+   {i:'★',t:'Elliott Bay 뷰 — 시애틀 워터프론트·Puget Sound 전망',q:'Seattle Great Wheel Ferris wheel Elliott Bay waterfront view'},
+   {i:'▸',t:'VIP 곤돌라 — 유리 바닥 프리미엄 캐빈 업그레이드 가능',q:'Seattle Great Wheel VIP gondola glass floor'},
+   {i:'💡',t:'온라인 사전 예매 권장 — 현장 줄 길 수 있음'},
+  ],
+  cost:'$16–20/인',tr:'Fremont에서 우버 $12–15',note:'',
+  hours:'일–목 11am–9pm · 금–토 11am–11pm',
+  photos:[],
+ },
+ {
+  start:'17:30',end:'18:00',dur:30,icon:'🌊',name:'Seattle Waterfront Walk',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJT1mPiRpBkFQRDIL5s6vKnPM',mapQ:'Pier+62+Seattle+Waterfront',
+  lat:47.6068,lng:-122.3428,
+  desc:'Elliott Bay 야경과 시애틀 스카이라인 감상. Pier 62 일대 산책. 저녁 식사 전 가볍게 20–30분.',
+  hl:[
+   {i:'▸',t:'Pier 62 — 리모델링된 현대적 워터프론트 피어',q:'Pier 62 Seattle waterfront park renovation'},
+   {i:'💡',t:'Great Wheel에서 도보 3분 — 연계 관광 최적'},
+  ],
+  cost:'무료',tr:'도보 (Great Wheel에서)',note:'',
+  photos:[],
+ },
+ {
+  start:'19:00',end:'20:30',dur:90,icon:'🥘',name:"Dinner — Seoul Tofu & Jjim",
+  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
+  pid:'ChIJfx-GKcUVkFQR4RpCORR_9vI',mapQ:'Seoul+Tofu+Jjim+Seattle',
+  lat:47.6225,lng:-122.3207,
+  desc:'Capitol Hill 한인들도 즐겨 찾는 순두부찌개·찜닭 전문점. 반찬 리필, 후식 야쿠르트 제공. 깔끔한 한식.',
+  hl:[
+   {i:'★',t:'순두부찌개 — 얼큰하고 부드러운 시그니처 메뉴',q:'Seoul Tofu Jjim Seattle soondubu jjigae Korean tofu soup'},
+   {i:'★',t:'찜닭 — 간장 베이스 닭찜, 당면 포함',q:'Seoul Tofu Jjim Seattle jjim dak braised chicken'},
+   {i:'▸',t:'반찬 리필 + 후식 야쿠르트 — 정갈한 한식 풀코스',q:'Seoul Tofu Jjim Seattle banchan side dishes'},
+   {i:'💡',t:'⚠ 예약 권장 · Capitol Hill 노상 주차 또는 유료 주차장'},
+  ],
+  cost:'$20–30/인',tr:'우버 $10–15',note:'예약 권장',
+  hours:'화–일 11:30am–9:30pm (월 휴무)',
+  photos:[],
+ },
+];
+
+
+/* ══ CONSTANTS ══ */
+const N=EVS.length, T_START=9*60, T_END=20.5*60, T_SPAN=T_END-T_START;
+function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
+function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
+function eRatio(ev){return(toMin(ev.start)-T_START)/T_SPAN;}
+
+/* ══ SHARED STATE ══ */
+let activeIdx=0;   // current event index (shared between all tabs)
+let curTab=0;
+
+/* ══════════════════════════════════
+   TAB SWITCHING — syncs event index
+══════════════════════════════════ */
+function showTab(n){
+  curTab=n;
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===n));
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('on',i===n));
+  if(n===1){
+    if(!mapBuilt){buildMap();mapBuilt=true;}
+    else mapGoTo(activeIdx);  // sync map to current event
+  }
+  if(n===2) requestAnimationFrame(()=>requestAnimationFrame(()=>{positionTicks();layoutCards();snapTo(activeIdx,false);initCardScrollHints();}));  // sync schedule
+}
+
+/* ══════════════════════════════════
+   MAP / NAV LINKS
+   — Google Maps web URL, same tab on mobile
+══════════════════════════════════ */
+function gmUrl(ev, mode){
+  const name=encodeURIComponent(ev.name);
+  if(mode==='nav')
+    return `https://www.google.com/maps/dir/?api=1&destination=${name}&destination_place_id=${ev.pid}&travelmode=driving`;
+  return `https://www.google.com/maps/search/?api=1&query=${name}&query_place_id=${ev.pid}`;
+}
+function openGM(evIdx, mode){
+  const ev=EVS[evIdx]; if(!ev||!ev.pid) return;
+  window.location.href=gmUrl(ev,mode);
+}
+// Legacy wrappers (called from inline onclick with pid)
+function openMap(pid){const i=EVS.findIndex(e=>e.pid===pid);if(i>=0)openGM(i,'map');}
+function openNav(pid){const i=EVS.findIndex(e=>e.pid===pid);if(i>=0)openGM(i,'nav');}
+
+/* ══════════════════════════════════
+   TAB 0 — OVERVIEW
+══════════════════════════════════ */
+function scrollToOvEvent(i){
+  const el=document.getElementById(`ov-ev-${i}`);
+  const sc=document.getElementById('ovScroll');
+  if(!el||!sc) return;
+  showTab(0);
+  setTimeout(()=>{
+    sc.scrollTo({top:el.getBoundingClientRect().top+sc.scrollTop-20,behavior:'smooth'});
+    el.style.outline='3px solid #2563EB';
+    setTimeout(()=>el.style.outline='',800);
+  },80);
+}
+
+function buildOverview(){
+  const wrap=document.getElementById('ovScroll');
+
+  // banner
+  const b=document.createElement('div');b.className='ov-banner';
+  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 15일 (화) · Seattle City + Bainbridge</div><div class="ov-ds">렌터카 → Hertz 4pm 반납 → 우버/도보 · 09:00–21:30</div></div>`;
+  wrap.appendChild(b);
+
+  // timebar — click scrolls to that event in overview
+  const tb=document.createElement('div');tb.className='timebar-wrap';
+  let bh=`<div class="timebar-lbl">타임바 — 탭하면 해당 일정으로 이동</div><div class="timebar">`;
+  EVS.forEach((ev,i)=>{
+    const flex=(ev.dur/T_SPAN*100).toFixed(2);
+    bh+=`<div class="timebar-seg" title="${ev.start} ${ev.name}" style="flex:${flex};background:${ev.color}" onclick="scrollToOvEvent(${i})"></div>`;
+  });
+  bh+=`</div><div class="timebar-ends"><span class="timebar-end">09:00</span><span class="timebar-end">21:30</span></div>`;
+  tb.innerHTML=bh; wrap.appendChild(tb);
+
+  // timeline rows
+  const tl=document.createElement('div');tl.className='tl';
+  EVS.forEach((ev,i)=>{
+    const sm=ev.dur<=30;
+    const bh2=Math.max(sm?48:82,ev.dur*(sm?1.1:1.5));
+    const hp=ev.photos.length>0;
+    const best=ev.hl.length?ev.hl[0].t:'';
+    const row=document.createElement('div');row.className='tl-row';
+    row.innerHTML=`
+      <div class="tl-axis"><div class="tl-time">${ev.start}</div><div class="tl-dot" style="background:${ev.color}"></div></div>
+      <div class="tl-block" id="ov-ev-${i}" style="border-left-color:${ev.color};min-height:${bh2}px"
+           onclick="activeIdx=${i};showTab(2);setTimeout(()=>snapTo(${i},true),60)">
+        <div class="tl-in">
+          <div class="tl-head"><span class="tl-ico">${ev.icon}</span><span class="tl-name">${ev.name}</span></div>
+          <div class="tl-pills">
+            <span class="tl-pill" style="background:${ev.catBg};color:${ev.catClr}">${ev.cat}</span>
+            <span class="tl-pill" style="background:${ev.color}18;color:${ev.color}">⏱ ${durLabel(ev.dur)}</span>
+            ${ev.cost!=='-'?`<span class="tl-pill" style="background:#ECFDF5;color:#065F46">💰 ${ev.cost}</span>`:''}
+            ${ev.note.includes('⚠')?`<span class="tl-pill" style="background:#FEF2F2;color:#991B1B">${ev.note}</span>`:''}
+            ${hp?`<span class="tl-pill" style="background:#F5F3FF;color:#6D28D9;cursor:pointer" onclick="event.stopPropagation();openPopup(${i})">${ev.cat==='식사'?'🍴 사진':'📸 사진'}</span>`:''}
+          </div>
+          ${!sm&&best?`<div class="tl-best">⭐ ${best}</div>`:''}
+          ${!sm?`<div class="tl-hint">탭 → 시간표 상세</div>`:''}
+          <div class="dur-bar" style="background:${ev.color}"></div>
+        </div>
+      </div>`;
+    tl.appendChild(row);
+  });
+  const er=document.createElement('div');er.className='tl-row';
+  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 1 완료</div>`;
+  tl.appendChild(er);
+  wrap.appendChild(tl);
+}
+
+/* ══════════════════════════════════
+   TAB 1 — MAP
+══════════════════════════════════ */
+let mapBuilt=false, showingRoute=false;
+
+function buildMap(){
+  const deck=document.getElementById('deck'),dots=document.getElementById('dots'),mini=document.getElementById('mini');
+  EVS.forEach((ev,i)=>{
+    // card
+    const c=document.createElement('div');c.className='sc';
+    c.innerHTML=`
+      <div class="sc-time">${ev.start} · ${i+1}/${N}</div>
+      <div class="sc-head">
+        <div class="sc-num" style="background:${ev.color}">${i+1}</div>
+        <div class="sc-name">${ev.name}</div>
+        <span class="sc-cat" style="background:${ev.catBg};color:${ev.catClr}">${ev.cat}</span>
+      </div>
+      <div class="sc-desc">${ev.desc}</div>
+      <div class="sc-row">
+        <div class="sc-btns">
+          ${ev.pid?`<button class="btn btn-blue" onclick="openGM(${i},'map')">📍 지도</button><button class="btn btn-green" onclick="openGM(${i},'nav')">🧭 길찾기</button>`:''}
+          ${ev.hl.length?`<button class="btn ${ev.cat==='식사'?'btn-amber':'btn-purple'}" onclick="openPopup(${i})">${ev.cat==='식사'?'🍴 메뉴':'📍 하이라이트'}</button>`:''}
+        </div>
+        <button class="btn btn-gray" style="margin-left:auto;flex-shrink:0" onclick="activeIdx=${i};showTab(2)">상세 ›</button>
+      </div>`;
+    deck.appendChild(c);
+    // dot
+    const d=document.createElement('div');d.className='dot';d.onclick=()=>mapGoTo(i);dots.appendChild(d);
+    // mini
+    if(i>0){const a=document.createElement('span');a.className='mini-arr';a.textContent='›';mini.appendChild(a);}
+    const ms=document.createElement('div');ms.className='mini-stop';
+    ms.innerHTML=`<div class="mini-num" id="mn-${i}" style="background:${ev.color}">${i+1}</div><div class="mini-lbl" id="ml-${i}">${ev.name}</div>`;
+    ms.onclick=()=>mapGoTo(i);mini.appendChild(ms);
+  });
+
+  // deck swipe
+  let tx=0,sw=false;
+  const dw=document.getElementById('deckWrap');
+  dw.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;sw=false;},{passive:true});
+  dw.addEventListener('touchmove',e=>{const dx=Math.abs(e.touches[0].clientX-tx);if(!sw&&dx>8)sw=true;if(sw)e.preventDefault();},{passive:false});
+  dw.addEventListener('touchend',e=>{
+    if(!sw)return;
+    const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>40){
+      const next=dx<0?Math.min(N-1,activeIdx+1):Math.max(0,activeIdx-1);
+      mapGoTo(next);
+    }
+    sw=false;
+  });
+
+  mapGoTo(activeIdx);
+}
+
+function mapGoTo(idx){
+  // Hide leaflet when going to individual stop
+  const ld=document.getElementById('leafletMap');if(ld){ld.style.display='none';document.getElementById('mapIframe').style.display='block';}
+  activeIdx=idx;
+  showingRoute=false;
+  const btn=document.getElementById('routeBtn');
+  btn.textContent='🗺 전체 동선'; btn.classList.remove('on');
+
+  document.getElementById('deck').style.transform=`translateX(${-idx*100}%)`;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===idx));
+  document.querySelectorAll('.mini-num').forEach((d,i)=>d.classList.toggle('on',i===idx));
+  document.querySelectorAll('.mini-lbl').forEach((d,i)=>d.classList.toggle('on',i===idx));
+  document.getElementById('mini').querySelectorAll('.mini-stop')[idx]?.scrollIntoView({inline:'center',behavior:'smooth'});
+
+  const ev=EVS[idx];
+  const src=ev.lat&&ev.lng
+    ? `https://maps.google.com/maps?q=${ev.lat},${ev.lng}&output=embed&z=15`
+    : `https://maps.google.com/maps?q=${ev.mapQ}&output=embed&z=15`;
+  loadMapIframe(src);
+}
+
+function toggleRoute(){
+  if(showingRoute){ mapGoTo(activeIdx); return; }
+  showingRoute=true;
+  const btn=document.getElementById('routeBtn');
+  btn.textContent='✕ 닫기'; btn.classList.add('on');
+
+  // Replace iframe with a Leaflet map showing all stops
+  const box=document.getElementById('mapBox');
+  const spin=document.getElementById('mapSpin');
+  spin.style.display='none';
+
+  // Hide iframe, show leaflet div
+  const iframe=document.getElementById('mapIframe');
+  iframe.style.display='none';
+
+  // Create or reuse leaflet container
+  let ldiv=document.getElementById('leafletMap');
+  if(!ldiv){
+    ldiv=document.createElement('div');
+    ldiv.id='leafletMap';
+    ldiv.style.cssText='position:absolute;inset:0;z-index:5';
+    box.appendChild(ldiv);
+  }
+  ldiv.style.display='block';
+
+  // Load Leaflet if not loaded
+  function initLeaflet(){
+    const stops=EVS.filter(e=>e.lat&&e.lng);
+    if(stops.length===0) return;
+
+    // Init map
+    if(window._leafletMap){
+      window._leafletMap.remove();
+      window._leafletMap=null;
+    }
+    const map=L.map('leafletMap');
+    window._leafletMap=map;
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'© OpenStreetMap contributors',
+      maxZoom:18
+    }).addTo(map);
+
+    const bounds=[];
+    stops.forEach((ev,i)=>{
+      const ll=[ev.lat,ev.lng];
+      bounds.push(ll);
+
+      // Numbered circle marker
+      const icon=L.divIcon({
+        className:'',
+        html:`<div style="
+          width:28px;height:28px;border-radius:50%;
+          background:${ev.color};color:#fff;
+          font-size:11px;font-weight:700;
+          display:flex;align-items:center;justify-content:center;
+          border:2px solid #fff;
+          box-shadow:0 2px 6px rgba(0,0,0,.3);
+        ">${i+1}</div>`,
+        iconSize:[28,28],iconAnchor:[14,14]
+      });
+
+      L.marker(ll,{icon})
+        .addTo(map)
+        .bindPopup(`<b>${ev.start}</b><br>${ev.name}`,{maxWidth:180});
+    });
+
+    // Draw route line
+    L.polyline(bounds,{color:'#2563EB',weight:3,opacity:.7,dashArray:'6,4'}).addTo(map);
+
+    // Fit to all markers
+    map.fitBounds(bounds,{padding:[30,30]});
+  }
+
+  if(window.L){
+    initLeaflet();
+  } else {
+    // Load Leaflet CSS + JS
+    const css=document.createElement('link');
+    css.rel='stylesheet';
+    css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+
+    const js=document.createElement('script');
+    js.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    js.onload=initLeaflet;
+    document.head.appendChild(js);
+  }
+}
+
+function loadMapIframe(src){
+  const iframe=document.getElementById('mapIframe');
+  const spin  =document.getElementById('mapSpin');
+  spin.style.display='flex';
+  iframe.src=src;
+  iframe.onload=()=>spin.style.display='none';
+}
+
+/* ══════════════════════════════════
+   TAB 2 — SCHEDULE SLIDER
+══════════════════════════════════ */
+function buildSchedule(){
+  const inner=document.getElementById('cardsInner');
+  EVS.forEach((ev,i)=>{
+    const card=document.createElement('div');
+    card.className='ev-card'+(i===0?' on':'');
+    card.id=`ec-${i}`;
+    card.addEventListener('click',e=>{if(!e.target.closest('button'))openCardExpand(i);});
+
+    const wc=ev.note.includes('⚠')?' warn':'';
+    const hasHl=ev.hl.some(h=>h.q);
+
+    // Highlights accordion
+    const hlRows=ev.hl.filter(h=>h.i!=='💡').map(h=>{
+      const name=h.t.includes(' — ')?h.t.split(' — ')[0]:h.t;
+      const detail=h.t.includes(' — ')?h.t.split(' — ')[1]:'';
+      return `<div class="hl-row${detail?'':' no-detail'}" onclick="this.classList.toggle('open')">
+        <div class="hl-row-top">
+          <span class="hl-i">${h.i}</span>
+          <span class="hl-t">${name}</span>
+          ${detail?`<span class="hl-arr">›</span>`:''}
+        </div>
+        ${detail?`<div class="hl-detail">${detail}</div>`:''}
+      </div>`;
+    }).join('');
+    const tips=ev.hl.filter(h=>h.i==='💡').map(h=>
+      `<div class="hl-tip">💡 ${h.t.replace(/^💡\s*/,'')}</div>`
+    ).join('');
+    const hlH=ev.hl.length
+      ?`<div class="hl-block">
+          <div class="hl-ttl">${ev.cat==='식사'?'추천 메뉴':'하이라이트'}</div>
+          ${hlRows}
+          ${tips?`<div class="hl-tips">${tips}</div>`:''}
+        </div>`
+      :'';
+
+    card.innerHTML=`
+      <div class="card-hd">
+        <div class="card-ico" style="background:${ev.color}20">${ev.icon}</div>
+        <div class="card-meta">
+          <div class="card-hd-top">
+            <div class="card-name">${ev.name}</div>
+            <button class="card-expand-mini" onclick="openCardExpand(${i})">전체보기 ›</button>
+          </div>
+          <div class="card-tr">
+            <span class="card-time">${ev.start}–${ev.end}</span>
+            <span class="card-dur" style="background:${ev.color}22;color:${ev.color}">⏱${durLabel(ev.dur)}</span>
+            <span class="card-cat-inline" style="background:${ev.catBg};color:${ev.catClr}">${ev.cat}</span>
+          </div>
+          <div class="card-chips-inline">
+            <span class="chip cost">💰${ev.cost}</span>
+            <span class="chip">🚌${ev.tr}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body-wrap" id="cbw-${i}">
+        <div class="card-body" id="cb-${i}">
+          <div class="card-desc">${ev.desc}</div>
+          ${hlH}
+        </div>
+      </div>
+      <div class="card-foot">
+        ${ev.hours?`<div class="card-hours">🕐 ${ev.hours}</div>`:''}
+        <div class="card-btns-row">
+          ${ev.pid?`<button class="btn btn-blue" onclick="openGM(${i},'map')">📍 지도</button><button class="btn btn-green" onclick="openGM(${i},'nav')">🧭 길찾기</button>`:''}
+          ${hasHl?`<button class="btn ${ev.cat==='식사'?'btn-amber':'btn-purple'}" onclick="openPopup(${i})">${ev.cat==='식사'?'🍴 메뉴':'📍 하이라이트'}</button>`:''}
+        </div>
+        <div class="card-nav-row">
+          <button class="card-nav-btn${i===0?' dim':''}" onclick="navCard(${i},-1)">▲ Prev</button>
+          <span class="card-nav-idx">${i+1} / ${N}</span>
+          <button class="card-nav-btn${i===N-1?' dim':''}" onclick="navCard(${i},+1)">Next ▼</button>
+        </div>
+      </div>`;
+    inner.appendChild(card);
+  });
+}
+
+
+// Card body scroll fade — hide gradient when scrolled to bottom
+function initCardScrollHints(){
+  EVS.forEach((_,i)=>{
+    const cb=document.getElementById('cb-'+i);
+    const wrap=document.getElementById('cbw-'+i);
+    if(!cb||!wrap) return;
+    function check(){
+      const atEnd=cb.scrollHeight-cb.scrollTop<=cb.clientHeight+4;
+      wrap.classList.toggle('scrolled-end',atEnd);
+    }
+    cb.addEventListener('scroll',check,{passive:true});
+    // Initial check after layout
+    requestAnimationFrame(check);
+  });
+}
+
+function buildTicks(){
+  const ta=document.getElementById('trackArea');
+  EVS.forEach((ev,i)=>{
+    const sz=ev.dur<=20?7:ev.dur<=45?9:ev.dur<=75?11:14;
+    const t=document.createElement('div');t.className='stk';t.id=`stk-${i}`;
+    t.innerHTML=`<div class="stk-dot${i===0?' on':''}" id="sd-${i}" style="width:${sz}px;height:${sz}px;background:${ev.color}"></div><div class="stk-lbl${i===0?' on':''}" id="sl-${i}">${ev.start}</div>`;
+    t.addEventListener('pointerdown',e=>{e.stopPropagation();snapTo(i,true);});
+    ta.appendChild(t);
+  });
+}
+
+function trackH(){return document.getElementById('trackArea').getBoundingClientRect().height;}
+function colH()  {return document.getElementById('cardsCol').getBoundingClientRect().height;}
+function idxToPx(i){return 10+eRatio(EVS[i])*(trackH()-20);}
+function pxToIdx(px){
+  const u=trackH()-20; let b=0,bd=Infinity;
+  EVS.forEach((ev,i)=>{const d=Math.abs(px-(10+eRatio(ev)*u));if(d<bd){bd=d;b=i;}});
+  return b;
+}
+function positionTicks(){
+  const h=trackH(); if(h<=0)return;
+  EVS.forEach((ev,i)=>{
+    const px=10+eRatio(ev)*(h-20);
+    document.getElementById(`stk-${i}`).style.top=px+'px';
+  });
+}
+function layoutCards(){
+  const h=colH(); if(h<=0)return;
+  document.getElementById('cardsInner').style.height=(N*h)+'px';
+  EVS.forEach((_,i)=>{
+    const el=document.getElementById(`ec-${i}`);
+    el.style.top=(i*h+10)+'px';
+    el.style.height=(h-20)+'px';
+  });
+}
+function renderThumb(px){
+  const h=trackH();
+  const el=document.getElementById('thumb');
+  el.style.top=(px-21)+'px';
+  el.style.transform='translateX(-50%)';
+  document.getElementById('fill').style.height=(h>0?Math.max(0,(px-10))+'px':'0');
+}
+function renderTicks(idx){
+  const ev=EVS[idx];
+  EVS.forEach((_,i)=>{
+    document.getElementById(`sd-${i}`).classList.toggle('on',i===idx);
+    document.getElementById(`sl-${i}`).classList.toggle('on',i===idx);
+    const u=document.getElementById(`nu-${i}`),d=document.getElementById(`nd-${i}`);
+    if(u)u.classList.toggle('dim',i===0); if(d)d.classList.toggle('dim',i===N-1);
+  });
+  document.getElementById('thumb').style.background=ev.color;
+  document.getElementById('thumb').textContent=ev.start;
+}
+function slideCards(idx,anim){
+  const h=colH(),ci=document.getElementById('cardsInner');
+  if(anim){ci.classList.add('anim');ci.addEventListener('transitionend',()=>ci.classList.remove('anim'),{once:true});}
+  else ci.classList.remove('anim');
+  ci.style.transform=`translateY(${-idx*h}px)`;
+  document.querySelectorAll('.ev-card').forEach((c,i)=>c.classList.toggle('on',i===idx));
+}
+function snapTo(idx,anim=true){
+  activeIdx=idx;
+  renderThumb(idxToPx(idx)); renderTicks(idx); slideCards(idx,anim);
+}
+function navCard(from,dir){const n=from+dir;if(n<0||n>=N)return;snapTo(n,true);}
+
+// Slider drag
+let isDrag=false,ancY=0,ancPx=0,rafId=null,pendY=null;
+function dragFrame(){
+  if(!isDrag)return;
+  if(pendY!==null){
+    const raw=Math.max(10,Math.min(trackH()-10,ancPx+(pendY-ancY)));
+    const idx=pxToIdx(raw);
+    renderThumb(raw);
+    document.getElementById('fill').style.height=Math.max(0,(raw-10))+'px';
+    if(idx!==activeIdx){activeIdx=idx;renderTicks(idx);slideCards(idx,false);}
+    pendY=null;
+  }
+  rafId=requestAnimationFrame(dragFrame);
+}
+const thumb=document.getElementById('thumb');
+thumb.addEventListener('pointerdown',e=>{
+  e.preventDefault();thumb.setPointerCapture(e.pointerId);
+  isDrag=true;ancY=e.clientY;ancPx=idxToPx(activeIdx);
+  thumb.classList.add('drag');pendY=null;rafId=requestAnimationFrame(dragFrame);
+});
+thumb.addEventListener('pointermove',e=>{if(!isDrag)return;e.preventDefault();pendY=e.clientY;});
+thumb.addEventListener('pointerup',e=>{
+  if(!isDrag)return;isDrag=false;thumb.classList.remove('drag');cancelAnimationFrame(rafId);
+  snapTo(pxToIdx(Math.max(10,Math.min(trackH()-10,ancPx+(e.clientY-ancY)))),true);
+});
+thumb.addEventListener('pointercancel',()=>{
+  if(!isDrag)return;isDrag=false;thumb.classList.remove('drag');cancelAnimationFrame(rafId);snapTo(activeIdx,true);
+});
+document.getElementById('trackArea').addEventListener('pointerdown',e=>{
+  if(e.target===thumb||thumb.contains(e.target))return;
+  snapTo(pxToIdx(e.clientY-document.getElementById('trackArea').getBoundingClientRect().top),true);
+});
+
+// Card swipe up/down — whole card area, direction-locked
+(()=>{
+  const col = document.getElementById('cardsCol');
+  let sx=0, sy=0, locked=null;
+
+  col.addEventListener('touchstart', e=>{
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    locked = null;
+  }, {passive:true});
+
+  col.addEventListener('touchmove', e=>{
+    const dx = Math.abs(e.touches[0].clientX - sx);
+    const dy = Math.abs(e.touches[0].clientY - sy);
+    if(!locked){
+      if(dy > 12 && dy > dx*1.5) locked='v';
+      else if(dx > 12) locked='h';
+    }
+    // Only intercept vertical swipes — block default to prevent page scroll
+    if(locked==='v') e.preventDefault();
+  }, {passive:false});
+
+  col.addEventListener('touchend', e=>{
+    if(locked !== 'v') return;
+    const dy = e.changedTouches[0].clientY - sy;
+    if(Math.abs(dy) > 50) navCard(activeIdx, dy < 0 ? 1 : -1);
+    locked = null;
+  }, {passive:true});
+})();
+
+/* ══════════════════════════════════
+   PHOTO POPUP
+══════════════════════════════════ */
+let popIdx=0;
+
+
+
+/* ── PHOTO: Google Image Search link only ── */
+const photoCache={};
+async function fetchPhotos(query, containerId){
+  // No API call — just show google search button
+  const el=document.getElementById(containerId);
+  if(!el) return;
+}
+
+function renderPhotoStrip(container, urls, query){
+  const strip=document.createElement('div');
+  strip.className='ph-strip';
+  urls.forEach(src=>{
+    const img=document.createElement('img');
+    img.className='ph-thumb loading';
+    img.onload=()=>img.classList.remove('loading');
+    img.onerror=()=>img.parentNode&&img.parentNode.removeChild(img);
+    img.src=src;
+    img.onclick=()=>openLightbox(src);
+    strip.appendChild(img);
+  });
+  container.appendChild(strip);
+}
+
+function openLightbox(src){
+  let lb=document.getElementById('phLightbox');
+  if(!lb){
+    lb=document.createElement('div');
+    lb.className='ph-lightbox'; lb.id='phLightbox';
+    lb.innerHTML=`<span class="ph-lightbox-close" onclick="document.getElementById('phLightbox').style.display='none'">✕</span><img id="phLbImg">`;
+    lb.onclick=e=>{if(e.target===lb)lb.style.display='none';};
+    document.body.appendChild(lb);
+  }
+  document.getElementById('phLbImg').src=src;
+  lb.style.display='flex';
+}
+
+function openPopup(evIdx){
+  const ev=EVS[evIdx];
+  document.getElementById('popTtl').textContent=ev.cat==='식사'?`🍴 ${ev.name}`:`📍 ${ev.name}`;
+
+  // Left panel — short name only
+  const left=document.getElementById('popLeft'); left.innerHTML='';
+  let visIdx=0;
+  ev.hl.forEach((h,j)=>{
+    if(!h.q) return;
+    if(visIdx>0){const sep=document.createElement('div');sep.className='poi-sep';left.appendChild(sep);}
+    const shortName=h.t.includes(' — ')?h.t.split(' — ')[0]:h.t;
+    const item=document.createElement('div');
+    item.className='poi-item'+(visIdx===0?' on':'');
+    item.id=`poi-${visIdx}`;
+    item.innerHTML=`<div class="poi-item-name">${shortName}</div>`;
+    item.onclick=(idx=>()=>selectHl(idx))(visIdx);
+    left.appendChild(item);
+    visIdx++;
+  });
+
+  // Right panel — detail + photo strip + google link
+  const right=document.getElementById('popRight'); right.innerHTML='';
+  const isFood=ev.cat==='식사';
+  let slideIdx=0;
+  ev.hl.forEach((h,j)=>{
+    if(!h.q) return;
+    const slide=document.createElement('div');
+    slide.className='poi-slide'+(slideIdx===0?' active':'');
+    slide.id='poi-slide-'+slideIdx;
+    const shortName=h.t.includes(' — ')?h.t.split(' — ')[0]:h.t;
+    const detail=h.t.includes(' — ')?h.t.split(' — ')[1]:'';
+    const gUrl='https://www.google.com/search?q='+encodeURIComponent(h.q)+'&tbm=isch';
+    slide.innerHTML=
+      '<div class="poi-name">'+shortName+'</div>'+
+      (detail?'<div class="poi-desc">'+detail+'</div>':'')+
+      (h.d?'<div class="poi-desc" style="margin-top:6px">'+h.d+'</div>':'')+
+      '<a href="'+gUrl+'" target="_blank" class="google-search-btn">🔍 Google 이미지 검색</a>';
+    right.appendChild(slide);
+    slideIdx++;
+  });
+
+  popIdx=0;
+  document.getElementById('overlay').classList.add('on');
+}
+
+function selectHl(j){
+  popIdx=j;
+  document.querySelectorAll('.poi-item').forEach((el,k)=>el.classList.toggle('on',k===j));
+  document.querySelectorAll('.poi-slide').forEach((s,k)=>{
+    s.classList.toggle('active',k===j);
+    if(k===j) s.scrollTop=0;
+  });
+  const left=document.getElementById('popLeft');
+  const act=document.getElementById(`poi-${j}`);
+  if(act&&left) left.scrollTo({top:act.offsetTop-4,behavior:'smooth'});
+
+}
+
+function closePopup(){
+  const box=document.getElementById('popupBox');
+  box.style.transition='transform .26s ease';
+  box.style.transform='translateY(100%)';
+  setTimeout(()=>{
+    document.getElementById('overlay').classList.remove('on');
+    box.style.transition=''; box.style.transform='';
+  },270);
+}
+
+// photo swipe removed (no photo section)
+
+// Right panel: horizontal swipe → next/prev slide
+(function(){
+  var pr=document.getElementById('popRight');
+  var x0=0,y0=0,locked=null;
+  pr.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY;locked=null;},{passive:true});
+  pr.addEventListener('touchmove',function(e){
+    if(locked==='v')return;
+    var dx=Math.abs(e.touches[0].clientX-x0),dy=Math.abs(e.touches[0].clientY-y0);
+    if(!locked){if(dx>8&&dx>dy)locked='h';else if(dy>8)locked='v';}
+    if(locked==='h')e.preventDefault();
+  },{passive:false});
+  pr.addEventListener('touchend',function(e){
+    if(locked!=='h')return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>40){
+      const slides=document.querySelectorAll('.poi-slide');
+      const n=slides.length;
+      if(n>0) selectHl((popIdx+(dx<0?1:-1)+n)%n);
+    }
+    locked=null;
+  },{passive:true});
+}());
+
+// Close: X button + background tap
+document.getElementById('popX').addEventListener('click',closePopup);
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))closePopup();});
+
+
+// Popup header drag-to-close
+(()=>{
+  const hd=document.getElementById('popHd'),box=document.getElementById('popupBox');
+  let sy=0,st=0,drag=false;
+  hd.addEventListener('pointerdown',e=>{hd.setPointerCapture(e.pointerId);sy=e.clientY;st=Date.now();drag=true;box.style.transition='none';});
+  hd.addEventListener('pointermove',e=>{if(!drag)return;const dy=Math.max(0,e.clientY-sy);box.style.transform=`translateY(${dy}px)`;});
+  hd.addEventListener('pointerup',e=>{
+    if(!drag)return;drag=false;
+    const dy=e.clientY-sy,dt=Date.now()-st;
+    if(dy>80||(dy>40&&dt<250)) closePopup();
+    else{box.style.transition='transform .2s ease';box.style.transform='';setTimeout(()=>box.style.transition='',200);}
+  });
+  hd.addEventListener('pointercancel',()=>{drag=false;box.style.transition='transform .2s ease';box.style.transform='';setTimeout(()=>box.style.transition='',200);});
+})();
+
+// split handle drag disabled — fixed ratio
+
+
+
+/* ══ CARD EXPAND VIEW ══ */
+function openCardExpand(evIdx){
+  if(evIdx<0||evIdx>=N) return;
+  activeIdx=evIdx;
+  const ev=EVS[evIdx];
+
+  // Header
+  const icon=document.getElementById('ceIcon');
+  icon.textContent=ev.icon; icon.style.background=ev.color+'20';
+  document.getElementById('ceName').textContent=ev.name;
+  document.getElementById('ceTime').textContent=
+    ev.start+' – '+ev.end+'  ·  '+ev.cat+'  ·  ⏱ '+durLabel(ev.dur);
+
+  // Nav
+  const nav=document.getElementById('ceNav');
+  nav.innerHTML=
+    `<button class="ce-nav-btn${evIdx===0?' dim':''}" onclick="openCardExpand(${evIdx-1})">▲ 이전</button>`+
+    `<span class="ce-nav-idx">${evIdx+1} / ${N}</span>`+
+    `<button class="ce-nav-btn${evIdx===N-1?' dim':''}" onclick="openCardExpand(${evIdx+1})">다음 ▼</button>`;
+
+  // Body
+  const body=document.getElementById('ceBody');
+  const hlH=ev.hl.length
+    ?`<div class="hl-block"><div class="hl-ttl">${ev.cat==='식사'?'추천 메뉴':'하이라이트'}</div>${ev.hl.map(h=>`<div class="ce-hl-row"><span class="hl-i">${h.i}</span><span>${h.t}</span></div>`).join('')}</div>`
+    :'';
+  const wc=ev.note.includes('⚠')?' warn':'';
+  body.innerHTML=
+    (ev.hours?`<div class="ce-hours">🕐 ${ev.hours}</div>`:'')+
+    `<div class="card-desc">${ev.desc}</div>`+
+    hlH+
+    `<div class="chips"><span class="chip cost">💰 ${ev.cost}</span><span class="chip">🚌 ${ev.tr}</span>${ev.note?`<span class="chip${wc}">${ev.note}</span>`:''}</div>`;
+  body.scrollTop=0;
+
+  // Footer
+  const foot=document.getElementById('ceFoot');
+  const hasHl=ev.hl.some(h=>h.q);
+  foot.innerHTML=
+    (ev.pid?`<button class="btn btn-blue" onclick="openGM(${evIdx},'map')">📍 지도</button>`+
+            `<button class="btn btn-green" onclick="openGM(${evIdx},'nav')">🧭 길찾기</button>`:'') +
+    (hasHl?`<button class="btn ${ev.cat==='식사'?'btn-amber':'btn-purple'}" onclick="openPopup(${evIdx})">`+
+           `${ev.cat==='식사'?'🍴 메뉴':'📍 하이라이트'}</button>`:'');
+
+  document.getElementById('ceOverlay').classList.add('on');
+  document.getElementById('ceBox').style.transform='';
+}
+
+function closeCardExpand(){
+  const box=document.getElementById('ceBox');
+  box.style.transition='transform .22s ease';
+  box.style.transform='translateY(100%)';
+  setTimeout(()=>{
+    document.getElementById('ceOverlay').classList.remove('on');
+    box.style.transition='';
+    box.style.transform='';
+  },220);
+}
+
+// Swipe-down to close
+(()=>{
+  const box=document.getElementById('ceBox');
+  let sy=0,st=0,dragging=false;
+  box.addEventListener('pointerdown',e=>{
+    if(e.target.closest('button')||e.target.closest('.ce-body')) return;
+    sy=e.clientY; st=Date.now(); dragging=true;
+    box.setPointerCapture(e.pointerId);
+    box.style.transition='none';
+  });
+  box.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    const dy=Math.max(0,e.clientY-sy);
+    box.style.transform=`translateY(${dy}px)`;
+  });
+  box.addEventListener('pointerup',e=>{
+    if(!dragging) return; dragging=false;
+    const dy=e.clientY-sy;
+    const fast=Date.now()-st<300&&dy>40;
+    if(dy>100||fast) closeCardExpand();
+    else{box.style.transition='transform .2s ease';box.style.transform='';}
+  });
+})();
+document.getElementById('ceOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('ceOverlay'))closeCardExpand();
+});
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+buildOverview();
+buildSchedule();
+buildTicks();
+requestAnimationFrame(()=>requestAnimationFrame(initCardScrollHints));
+
+requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  positionTicks(); layoutCards(); snapTo(0,false);
+}));
+window.addEventListener('resize',()=>{positionTicks();layoutCards();snapTo(activeIdx,false);});
+
+
+/* ══ DAY NAVIGATION ══ */
+function gotoDay(n){
+  if(n<1||n>4) return;
+  const files=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day4_Complete.html'];
+  if(n===3) return; // already here
+  window.location.href=files[n-1];
+}
+</script>
+</body>
+</html>
