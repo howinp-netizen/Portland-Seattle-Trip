@@ -316,6 +316,24 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .day-nav-arrow.dim{opacity:.25;pointer-events:none}
 .hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .hdr-info{flex:1;min-width:0}
+
+/* ── DAY DOTS ── */
+.hdr-title-row{display:flex;align-items:center;gap:8px}
+.hdr-dots{display:flex;gap:5px;align-items:center}
+.day-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
+.day-dot-on{background:#fff;transform:scale(1.25)}
+
+/* ── BIGGER CARD FONTS ── */
+.card-desc{font-size:16px!important;color:#475569;line-height:1.7;margin-bottom:10px}
+.hl-row{font-size:17px!important;line-height:1.6}
+.hl-i{font-size:14px!important}
+.ce-body .hl-row{font-size:17px!important}
+.ce-desc{font-size:16px!important;line-height:1.7}
+.ce-hl-row{font-size:17px!important;line-height:1.6}
+.chip{font-size:15px!important}
+.card-hours{font-size:13px!important}
+.ce-hours{font-size:14px!important}
+.sc-desc{font-size:16px!important;line-height:1.6}
 </style>
 </head>
 <body>
@@ -325,8 +343,11 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
     <button class="day-nav-arrow" id="dayPrev" onclick="gotoDay(3)">‹</button>
     <div class="hdr-badge">DAY 4</div>
     <div class="hdr-info">
-      <div class="hdr-title">체크아웃 → SEA-TAC</div>
-      <div class="hdr-sub">April 18 (Fri) · 5 stops</div>
+      <div class="hdr-title-row">
+        <div class="hdr-title" id="hdrTitle"></div>
+        <div class="hdr-dots"><div class="day-dot"></div><div class="day-dot"></div><div class="day-dot"></div><div class="day-dot day-dot-on"></div></div>
+      </div>
+      <div class="hdr-sub" id="hdrSub"></div>
     </div>
     <button class="day-nav-arrow dim" id="dayNext" onclick="gotoDay(5)">›</button>
   </div>
@@ -487,7 +508,10 @@ const EVS=[
 
 
 /* ══ CONSTANTS ══ */
-const N=EVS.length, T_START=9*60, T_END=12.5*60, T_SPAN=T_END-T_START;
+const N=EVS.length;
+document.getElementById('hdrTitle').textContent='체크아웃 → SEA-TAC';
+document.getElementById('hdrSub').textContent='April 18 (Fri) · '+N+' stops';
+const T_START=9*60, T_END=12.5*60, T_SPAN=T_END-T_START;
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
 function eRatio(ev){return(toMin(ev.start)-T_START)/T_SPAN;}
@@ -545,12 +569,6 @@ function scrollToOvEvent(i){
 
 function buildOverview(){
   const wrap=document.getElementById('ovScroll');
-
-  // banner
-  const b=document.createElement('div');b.className='ov-banner';
-  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 18일 (금) · 체크아웃 → SEA-TAC</div><div class="ov-ds">체크아웃 → 공항 이동 · 09:00–12:10</div></div>`;
-  wrap.appendChild(b);
-
   // timebar — click scrolls to that event in overview
   const tb=document.createElement('div');tb.className='timebar-wrap';
   let bh=`<div class="timebar-lbl">타임바 — 탭하면 해당 일정으로 이동</div><div class="timebar">`;
@@ -1257,6 +1275,23 @@ function gotoDay(n){
   if(n===4) return; // already here
   window.location.href=files[n-1];
 }
+
+/* ── HEADER SWIPE ── */
+(function(){
+  const hdr=document.querySelector('.hdr');
+  let sx=0,sy=0,swiped=false;
+  hdr.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;swiped=false;},{passive:true});
+  hdr.addEventListener('touchend',e=>{
+    if(swiped)return;
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.5){
+      swiped=true;
+      if(dx<0) gotoDay(5);
+      else gotoDay(3);
+    }
+  },{passive:true});
+})();
 </script>
 </body>
 </html>
