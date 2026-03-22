@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Day 1 · Seattle City + Bainbridge</title>
+<title>Day 3 · Skagit 튤립 + 페리 + 시내</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",sans-serif;background:#F1F5F9;color:#1E293B}
@@ -19,7 +19,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .tab.on{background:#fff;color:#1E40AF}
 
 /* ── PANELS: visibility switching — layout always alive ── */
-.panels{position:fixed;top:120px;left:0;right:0;bottom:0}
+.panels{position:fixed;top:88px;left:0;right:0;bottom:0}
 .panel{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;visibility:hidden;z-index:0}
 .panel.on{visibility:visible;z-index:10}
 
@@ -306,23 +306,27 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .ce-hours{font-size:13px;color:#0369A1;background:#EFF6FF;border-radius:8px;padding:6px 12px;
   margin-bottom:10px;font-weight:500;line-height:1.4}
 
+
+/* ── DAY NAVIGATOR ── */
+.day-nav-arrow{background:rgba(255,255,255,.18);border:none;color:#fff;
+  width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:background .15s}
+.day-nav-arrow:active{background:rgba(255,255,255,.35)}
+.day-nav-arrow.dim{opacity:.25;pointer-events:none}
+.hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hdr-info{flex:1;min-width:0}
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hdr-top">
-    <div class="hdr-badge">DAY 3</div>
-    <div>
-      <div class="hdr-title">Seattle City + Bainbridge</div>
-      <div class="hdr-sub">April 17 (Thu) · 9 stops</div>
-    </div>
-  </div>
-  <div class="day-nav-bar">
     <button class="day-nav-arrow" id="dayPrev" onclick="gotoDay(2)">‹</button>
-    <div class="day-nav-center">
-      <div class="day-nav-label">Day 3 / 4</div>
-      <div class="day-nav-sub">April 15 · Seattle City + Bainbridge</div>
+    <div class="hdr-badge">DAY 3</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Skagit 튤립 + 페리 + 시내</div>
+      <div class="hdr-sub">April 17 (Thu) · 9 stops</div>
     </div>
     <button class="day-nav-arrow" id="dayNext" onclick="gotoDay(4)">›</button>
   </div>
@@ -409,145 +413,148 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 <script>
 const EVS=[
  {
-  start:'10:00',end:'10:35',dur:35,icon:'⛴',name:'Ferry to Bainbridge Island',
-  cat:'이동',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJKxjxPWtBkFQRtP7KQoJExbA',mapQ:'Seattle+Ferry+Terminal+Pier+52',
-  lat:47.6024,lng:-122.3386,
-  desc:'Pier 52 워싱턴 주립 페리 탑승. 편도 약 35분. 퓨젯사운드에서 시애틀 스카이라인·Space Needle·Mt. Rainier 조망.',
+  start:'08:00',end:'09:15',dur:75,icon:'🚗',name:'롯데호텔 출발 → RoozenGaarde',
+  cat:'이동',catBg:'#F1F5F9',catClr:'#475569',color:'#94A3B8',
+  pid:'ChIJl3yvuRJrkFQRa1ze_XPfDFo',mapQ:'Lotte+Hotel+Seattle',
+  lat:47.6073,lng:-122.3351,
+  desc:'렌터카 픽업 후 I-5 북상. Seattle → RoozenGaarde 약 1시간 15분. Mount Vernon Exit 226 하차.',
   hl:[
-   {i:'★',t:'시애틀 스카이라인 뷰 — 출항 직후 뒤돌아보면 Space Needle 전경',q:'Seattle ferry Puget Sound skyline Space Needle view'},
-   {i:'▸',t:'창가 자리 선점 — 오른쪽(북쪽) 자리가 스카이라인 뷰 최고',q:'Washington State Ferry inside window seat view'},
-   {i:'💡',t:'차는 호텔에 두고 도보 탑승 강력 추천 — 왕복 $9/인'},
-   {i:'💡',t:'터미널 인근 U-Park Lot(801 Western Ave) 주차 $10–15/일'},
+   {i:'▸',t:'I-5 북상 중 Cascade 산맥 조망',q:'I-5 North Seattle Cascade Mountains view'},
+   {i:'💡',t:'Mount Vernon Exit 226 하차 → RoozenGaarde'},
   ],
-  cost:'왕복 $9/인',tr:'도보 → 페리',note:'',
-  hours:'매일 운행 · 첫 배 5:30am · 시간표 확인 필수',
+  cost:'-',tr:'렌터카 (별도 계약) | 고속도로 무료',note:'',
   photos:[],
  },
  {
-  start:'10:35',end:'12:30',dur:115,icon:'🏘',name:'Bainbridge Island — Winslow',
+  start:'09:15',end:'11:15',dur:120,icon:'🌷',name:'RoozenGaarde 튤립 가든',
   cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJOVFYJC1mkVQRB6OkSWJiBWc',mapQ:'Winslow+Way+Bainbridge+Island',
-  lat:47.6247,lng:-122.5194,
-  desc:'페리 터미널에서 도보 8분. 아기자기한 카페·서점·기념품숍·갤러리. 조용하고 깔끔한 아일랜드 분위기.',
+  pid:'ChIJAU2dYR5vhVQREgVCPc8_f5Y',mapQ:'RoozenGaarde+15867+Beaver+Marsh+Rd+Mount+Vernon+WA',
+  lat:48.4216,lng:-122.3731,
+  desc:'1985년 창업 네덜란드계 튤립 농장. Skagit Valley Tulip Festival 핵심 명소. 2026 피크 블룸 4/14~4/20 예상 — 여행 기간 정확히 일치!',
   hl:[
-   {i:'★',t:'Bainbridge Island Museum of Art — 무료 입장 현대미술관',q:'Bainbridge Island Museum of Art BIMA gallery'},
-   {i:'▸',t:'Eagle Harbor Book Co. — 독립 서점, 로컬 아이템 구경',q:'Eagle Harbor Book Company Bainbridge Island bookstore'},
-   {i:'▸',t:'Winslow Way 카페 거리 — 로컬 카페에서 커피 한 잔',q:'Winslow Way Bainbridge Island cafe coffee'},
-   {i:'💡',t:'차 없이 도보 탐방 — 페리 터미널에서 마을까지 도보 8분'},
+   {i:'★',t:'8에이커 디스플레이 가든 — 색상별 구획 튤립+Cascade 산맥 배경',q:'RoozenGaarde tulip garden Skagit Valley display garden Cascade Mountains'},
+   {i:'★',t:'오픈 필드 — 지평선까지 펼쳐진 튤립 바다',q:'RoozenGaarde open tulip field Skagit Valley Washington'},
+   {i:'▸',t:'생화 구매 코너 — 당일 수확 생화 ($15–25 다발)',q:'RoozenGaarde fresh cut tulips purchase'},
+   {i:'💡',t:'이른 아침 9–10시 방문: 인파 적고 빛 최고'},
+   {i:'⚠',t:'2026 피크 블룸 4/14~4/20 예상 — 여행 기간 정확히 일치!'},
   ],
-  cost:'무료 입장 / 쇼핑 개인',tr:'도보',note:'',
+  cost:'$16/인 (평일)',tr:'렌터카 | 전용 주차장 무료 (혼잡 시 셔틀 운행)',note:'2026 피크 블룸: 4/14~20',
+  hours:'튤립 페스티벌 기간 매일 9am–7pm',
+  photos:[],
+ },
+ {
+  start:'11:15',end:'12:30',dur:75,icon:'🚗',name:'Seattle 귀환 + 렌터카 반납',
+  cat:'이동',catBg:'#F1F5F9',catClr:'#475569',color:'#94A3B8',
+  pid:'ChIJl3yvuRJrkFQRa1ze_XPfDFo',mapQ:'Lotte+Hotel+Seattle',
+  lat:47.6073,lng:-122.3351,
+  desc:'I-5 남하. 약 1시간 15분 귀환. 시내 렌터카 반납 후 우버/대중교통 전환. 반납 후 점심까지 우버 or 도보 (Pike Place Market 도보권).',
+  hl:[
+   {i:'⚠',t:'렌터카 반납 후 오후는 우버/도보로 전환'},
+   {i:'▸',t:'반납처 → Pike Place Market 도보권'},
+  ],
+  cost:'렌터카 반납',tr:'렌터카 반납 → 이후 우버/리프트',note:'',
+  photos:[],
+ },
+ {
+  start:'12:30',end:'13:45',dur:75,icon:'🍝',name:'점심 — Pasta Casalinga',
+  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
+  pid:'ChIJAdP3V7JqkFQRh3g6UpDngzY',mapQ:'Pasta+Casalinga+93+Pike+St+Seattle',
+  lat:47.6087,lng:-122.3421,
+  desc:'Pike Place Market 2층 코너. 매일 신선 파스타 직접 제조. Food & Wine, Kenji Lopez-Alt 추천. 영업 11am–4:45pm (점심 전용).',
+  hl:[
+   {i:'★',t:'Squid Ink Spaghetti alla Chitarra — 오징어먹물 파스타 시그니처',q:'Pasta Casalinga Seattle squid ink spaghetti pike place'},
+   {i:'★',t:'Seafood Pasta (from the sea) — 문어+올리브+케이퍼',q:'Pasta Casalinga Seattle seafood pasta'},
+   {i:'▸',t:'매일 바뀌는 신선 파스타 — 현장 확인',q:'Pasta Casalinga Seattle fresh pasta daily'},
+   {i:'⚠',t:"'No Chicken' 정책 | 영업 11AM~4:45PM 점심 전용"},
+  ],
+  cost:'$18–28/인',tr:'우버/리프트 $8–12 (반납처 → Pike Place)',note:'영업 11AM~4:45PM',
+  hours:'매일 11am–4:45pm',
+  photos:[],
+ },
+ {
+  start:'13:45',end:'14:40',dur:55,icon:'⛴',name:'페리 탑승 — Seattle → Bainbridge',
+  cat:'이동',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJGx2xvK9qkFQRyrK31V0A5bo',mapQ:'Washington+State+Ferries+Pier+52+Seattle',
+  lat:47.6024,lng:-122.3386,
+  desc:'Pier 52 탑승. 2:05 PM 페리 권장 → 2:40 PM Bainbridge 도착. 도보 탑승, 예약 불필요. 1:40 PM Pier 도착 권장.',
+  hl:[
+   {i:'★',t:'페리 갑판 전망 — 시애틀 스카이라인+올림픽 산맥 파노라마',q:'Seattle ferry Puget Sound skyline Space Needle view'},
+   {i:'▸',t:'평일 Seattle→Bainbridge: 1:10 / 2:05 / 3:00 / 3:50 PM',q:'Washington State Ferry Bainbridge schedule'},
+   {i:'💡',t:'2:05 PM 탑승 → 2:40 PM 도착 권장 | 1:40 PM Pier 도착'},
+   {i:'💡',t:'도보 탑승, 예약 불필요 — 5분 전 도착 OK'},
+  ],
+  cost:'$11.05/인 (편도)',tr:'도보 (Pike Place → Pier 52 5분)',note:'2:05 PM 탑승 권장',
+  hours:'평일 주요 편: 1:10 / 2:05 / 3:00 / 3:50 PM',
+  photos:[],
+ },
+ {
+  start:'14:40',end:'17:00',dur:140,icon:'🏘',name:'Bainbridge Island 탐방',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJjf0ZwgM_kFQREY9dHU-dtB8',mapQ:'Winslow+Bainbridge+Island+WA',
+  lat:47.6247,lng:-122.5194,
+  desc:'2:40 PM Bainbridge 도착. Winslow 마을 탐방 약 1시간 45분. 4:30 PM 터미널 귀환 시작.',
+  hl:[
+   {i:'★',t:'Winslow 마을 산책 — 아기자기한 숍+카페',q:'Bainbridge Island Winslow Way shops cafes'},
+   {i:'▸',t:'Eagle Harbor 워터프론트 — 조용한 항구 분위기',q:'Bainbridge Island Eagle Harbor waterfront'},
+   {i:'▸',t:'Bainbridge Island Museum of Art — 무료 입장',q:'Bainbridge Island Museum of Art BIMA'},
+   {i:'💡',t:'4:30 PM 터미널 귀환 시작 — 4:45 PM 페리 목표'},
+  ],
+  cost:'Free (입장)',tr:'페리 포함 | 도보 탐방',note:'터미널 4:30 PM 귀환',
   hours:'박물관 수–일 10am–5pm · 상점 대부분 10am–6pm',
   photos:[],
  },
  {
-  start:'12:30',end:'13:30',dur:60,icon:'🍽',name:'Lunch — Bainbridge Island',
-  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
-  pid:'ChIJJwVLtixmkVQRV3UZ5h0Bk7s',mapQ:'Restaurants+Winslow+Way+Bainbridge+Island',
-  lat:47.6247,lng:-122.5194,
-  desc:'Winslow Way 현지 식당. 신선한 시푸드 샌드위치·수프 등 아일랜드 현지식 추천.',
-  hl:[
-   {i:'★',t:'Harbour Public House — 아일랜드 대표 펍, 시푸드 버거',q:'Harbour Public House Bainbridge Island seafood burger'},
-   {i:'▸',t:'Blackbird Bakery — 홈메이드 베이커리·샌드위치·수프',q:'Blackbird Bakery Bainbridge Island'},
-   {i:'💡',t:'성수기엔 줄 길 수 있음 — 도착하자마자 바로 이동 추천'},
-  ],
-  cost:'$20–35/인',tr:'도보',note:'',
-  hours:'상점마다 상이 · 대부분 11am–9pm',
-  photos:[],
- },
- {
-  start:'13:30',end:'14:05',dur:35,icon:'⛴',name:'Ferry back to Seattle',
+  start:'17:00',end:'17:30',dur:30,icon:'⛴',name:'페리 귀환 — Bainbridge → Seattle',
   cat:'이동',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJOVFYJC1mkVQRB6OkSWJiBWc',mapQ:'Bainbridge+Island+Ferry+Terminal',
+  pid:'ChIJGx2xvK9qkFQRyrK31V0A5bo',mapQ:'Bainbridge+Island+Ferry+Terminal',
   lat:47.6229,lng:-122.5131,
-  desc:'귀환 페리 탑승. 약 35분. 시애틀 스카이라인이 점점 가까워지는 뷰가 일품.',
+  desc:'4:45 PM 탑승 → 5:20 PM Seattle 도착 권장. Bainbridge → Seattle 도보 탑승 무료!',
   hl:[
    {i:'★',t:'접근하는 시애틀 뷰 — 입항 시 다운타운 풀뷰 포착',q:'Seattle ferry approaching downtown skyline arriving'},
-   {i:'💡',t:'왕복 티켓 — 귀환 시 추가 결제 없음'},
+   {i:'▸',t:'평일 귀환: 3:50 / 4:45 / 5:35 PM',q:'Bainbridge Island ferry return schedule Seattle'},
+   {i:'⚠',t:'Bainbridge → Seattle 도보 탑승 무료!'},
+   {i:'💡',t:'4:45 PM 탑승 → 5:20 PM Seattle 도착 권장'},
   ],
-  cost:'왕복 티켓 포함',tr:'페리',note:'',
-  hours:'매일 운행 · 시간표 확인 필수',
+  cost:'무료 (도보 귀환)',tr:'페리 탑승 무료',note:'4:45 PM 탑승 → 5:20 PM 도착',
+  hours:'평일 귀환 편: 3:50 / 4:45 / 5:35 PM',
   photos:[],
  },
  {
-  start:'14:05',end:'15:30',dur:85,icon:'🐟',name:'Pike Place Market',
+  start:'17:30',end:'18:00',dur:30,icon:'🎡',name:'Great Wheel 외부 구경',
   cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJPZnomhpBkFQRak2oDAkWzSc',mapQ:'Pike+Place+Market+Seattle',
-  lat:47.6085,lng:-122.3421,
-  desc:'Day 1에서 저녁에 봤다면 오늘은 낮에 더 여유롭게. 생선 던지기·오리지널 스타벅스·신선 과일·꽃·수공예품.',
-  hl:[
-   {i:'★',t:'Pike Place Fish Co. — 생선 공중 던지기 퍼포먼스 (1930년 창업)',q:'Pike Place Fish Co fish throwing flying fish market Seattle'},
-   {i:'★',t:'Rachel the Pig — 입구 청동 돼지 저금통, 만지면 행운',q:'Rachel the Pig bronze piggy bank Pike Place Market Seattle'},
-   {i:'▸',t:'Original Starbucks — 1912 Pike Pl, 세계 1호점 (1971년 개점)',q:'Original Starbucks 1912 Pike Place first store 1971 Seattle'},
-   {i:'▸',t:'Post Alley Gum Wall — 지하 골목 껌 아트 명소 (1993년~)',q:'Post Alley Gum Wall Pike Place Seattle underground alley'},
-  ],
-  cost:'무료 입장 / 쇼핑 개인',tr:'도보 (Pier 52에서 10분)',note:'',
-  hours:'매일 9am–6pm (상점마다 상이)',
-  photos:[],
- },
- {
-  start:'15:30',end:'16:30',dur:60,icon:'🧌',name:'Fremont Troll',
-  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJWbkFPCcVkFQRn7RWA5XksFo',mapQ:'Fremont+Troll+Seattle',
-  lat:47.6510,lng:-122.3473,
-  desc:'다리 밑 거대 트롤 조각상. 실제 VW 비틀을 움켜쥔 공공예술. 사진 명소. Fremont 이색 카페·숍 탐방.',
-  hl:[
-   {i:'★',t:'Fremont Troll — VW 비틀 움켜쥔 18톤 콘크리트 트롤',q:'Fremont Troll Seattle statue under bridge VW beetle'},
-   {i:'▸',t:'Fremont Sunday Market — 주말 오픈마켓 (4/17 목요일은 없음)',q:'Fremont neighborhood Seattle quirky shops cafes'},
-   {i:'💡',t:'Pike Place에서 우버 $12–18 추천 · 도보 불가 거리'},
-  ],
-  cost:'무료',tr:'우버 $12–18',note:'',
-  photos:[],
- },
- {
-  start:'16:30',end:'17:30',dur:60,icon:'🎡',name:'Seattle Great Wheel',
-  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJoRFLBhpBkFQREoHV3kF2lME',mapQ:'Seattle+Great+Wheel',
+  pid:'ChIJUX-M-a1qkFQRxtrx3nOQIKU',mapQ:'Seattle+Great+Wheel+Pier+57',
   lat:47.6059,lng:-122.3419,
-  desc:'워터프론트 대관람차. 약 12–20분간 3바퀴 회전. Elliott Bay 해안 전망. 일몰 타이밍 맞추면 황금빛 야경 최고.',
+  desc:'Pier 57 대관람차. 외부 구경+포토스팟. 탑승 없이 워터프론트 산책 포함. Elliott Bay 석양+페리 불빛 감상.',
   hl:[
-   {i:'★',t:'Elliott Bay 뷰 — 시애틀 워터프론트·Puget Sound 전망',q:'Seattle Great Wheel Ferris wheel Elliott Bay waterfront view'},
-   {i:'▸',t:'VIP 곤돌라 — 유리 바닥 프리미엄 캐빈 업그레이드 가능',q:'Seattle Great Wheel VIP gondola glass floor'},
-   {i:'💡',t:'온라인 사전 예매 권장 — 현장 줄 길 수 있음'},
+   {i:'★',t:'Great Wheel 외관 — 53m 높이 대관람차 석양 배경 포토스팟',q:'Seattle Great Wheel Ferris wheel waterfront sunset'},
+   {i:'▸',t:'Pier 57 워터프론트 산책',q:'Seattle Pier 57 waterfront walk'},
+   {i:'💡',t:'탑승 없이 외부 구경+산책 (탑승 원하면 $16–20/인)'},
   ],
-  cost:'$16–20/인',tr:'Fremont에서 우버 $12–15',note:'',
+  cost:'Free (외부)',tr:'도보 (Pier 52 → Great Wheel 5분)',note:'탑승 없이 외부 구경',
   hours:'일–목 11am–9pm · 금–토 11am–11pm',
   photos:[],
  },
  {
-  start:'17:30',end:'18:00',dur:30,icon:'🌊',name:'Seattle Waterfront Walk',
-  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJT1mPiRpBkFQRDIL5s6vKnPM',mapQ:'Pier+62+Seattle+Waterfront',
-  lat:47.6068,lng:-122.3428,
-  desc:'Elliott Bay 야경과 시애틀 스카이라인 감상. Pier 62 일대 산책. 저녁 식사 전 가볍게 20–30분.',
-  hl:[
-   {i:'▸',t:'Pier 62 — 리모델링된 현대적 워터프론트 피어',q:'Pier 62 Seattle waterfront park renovation'},
-   {i:'💡',t:'Great Wheel에서 도보 3분 — 연계 관광 최적'},
-  ],
-  cost:'무료',tr:'도보 (Great Wheel에서)',note:'',
-  photos:[],
- },
- {
-  start:'19:00',end:'20:30',dur:90,icon:'🥘',name:"Dinner — Seoul Tofu & Jjim",
+  start:'18:00',end:'19:30',dur:90,icon:'🥪',name:'저녁 — Michou Deli',
   cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
-  pid:'ChIJfx-GKcUVkFQR4RpCORR_9vI',mapQ:'Seoul+Tofu+Jjim+Seattle',
-  lat:47.6225,lng:-122.3207,
-  desc:'Capitol Hill 한인들도 즐겨 찾는 순두부찌개·찜닭 전문점. 반찬 리필, 후식 야쿠르트 제공. 깔끔한 한식.',
+  pid:'ChIJ6WbuxrJqkFQRgf0TymZty_s',mapQ:'Michou+Deli+1904+Pike+Pl+Seattle',
+  lat:47.6095,lng:-122.3422,
+  desc:'Pike Place Market 내 샌드위치 델리. 현지인 애용 가성비 맛집. ⚠ 영업 9am–6pm → 반드시 18:00 이전 방문!',
   hl:[
-   {i:'★',t:'순두부찌개 — 얼큰하고 부드러운 시그니처 메뉴',q:'Seoul Tofu Jjim Seattle soondubu jjigae Korean tofu soup'},
-   {i:'★',t:'찜닭 — 간장 베이스 닭찜, 당면 포함',q:'Seoul Tofu Jjim Seattle jjim dak braised chicken'},
-   {i:'▸',t:'반찬 리필 + 후식 야쿠르트 — 정갈한 한식 풀코스',q:'Seoul Tofu Jjim Seattle banchan side dishes'},
-   {i:'💡',t:'⚠ 예약 권장 · Capitol Hill 노상 주차 또는 유료 주차장'},
+   {i:'★',t:'Turkey Sandwich — 토스팅된 빵+신선 채소 시그니처',q:'Michou Deli Pike Place Seattle turkey sandwich'},
+   {i:'★',t:'Roast Beef & Gorgonzola — 풍미 깊은 조합',q:'Michou Deli Seattle roast beef gorgonzola'},
+   {i:'▸',t:'Blueberry Bread Pudding — Pike Place 최고 디저트 후기',q:'Michou Deli Seattle blueberry bread pudding'},
+   {i:'⚠',t:'영업 9am–6pm | 반드시 18:00 이전 입장 필수!'},
   ],
-  cost:'$20–30/인',tr:'우버 $10–15',note:'예약 권장',
-  hours:'화–일 11:30am–9:30pm (월 휴무)',
+  cost:'$12–18/인',tr:'도보 (Great Wheel → Pike Place 5분)',note:'⚠ 영업 9AM–6PM | 18:00 이전 방문 필수',
+  hours:'매일 9am–6pm',
   photos:[],
  },
 ];
 
 
 /* ══ CONSTANTS ══ */
-const N=EVS.length, T_START=9*60, T_END=20.5*60, T_SPAN=T_END-T_START;
+const N=EVS.length, T_START=8*60, T_END=20*60, T_SPAN=T_END-T_START;
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
 function eRatio(ev){return(toMin(ev.start)-T_START)/T_SPAN;}
@@ -608,7 +615,7 @@ function buildOverview(){
 
   // banner
   const b=document.createElement('div');b.className='ov-banner';
-  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 15일 (화) · Seattle City + Bainbridge</div><div class="ov-ds">렌터카 → Hertz 4pm 반납 → 우버/도보 · 09:00–21:30</div></div>`;
+  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 17일 (목) · Skagit 튤립 + 페리 + 시내</div><div class="ov-ds">렌터카 오전 (튤립) → 반납 → 우버/도보 · 08:00–19:30</div></div>`;
   wrap.appendChild(b);
 
   // timebar — click scrolls to that event in overview
@@ -618,7 +625,7 @@ function buildOverview(){
     const flex=(ev.dur/T_SPAN*100).toFixed(2);
     bh+=`<div class="timebar-seg" title="${ev.start} ${ev.name}" style="flex:${flex};background:${ev.color}" onclick="scrollToOvEvent(${i})"></div>`;
   });
-  bh+=`</div><div class="timebar-ends"><span class="timebar-end">09:00</span><span class="timebar-end">21:30</span></div>`;
+  bh+=`</div><div class="timebar-ends"><span class="timebar-end">08:00</span><span class="timebar-end">20:00</span></div>`;
   tb.innerHTML=bh; wrap.appendChild(tb);
 
   // timeline rows
@@ -650,7 +657,7 @@ function buildOverview(){
     tl.appendChild(row);
   });
   const er=document.createElement('div');er.className='tl-row';
-  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 1 완료</div>`;
+  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 3 완료</div>`;
   tl.appendChild(er);
   wrap.appendChild(tl);
 }

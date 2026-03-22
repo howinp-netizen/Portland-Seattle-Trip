@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Day 1 · Mt. Rainier Day</title>
+<title>Day 2 · Mt. Rainier Day</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",sans-serif;background:#F1F5F9;color:#1E293B}
@@ -19,7 +19,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .tab.on{background:#fff;color:#1E40AF}
 
 /* ── PANELS: visibility switching — layout always alive ── */
-.panels{position:fixed;top:120px;left:0;right:0;bottom:0}
+.panels{position:fixed;top:88px;left:0;right:0;bottom:0}
 .panel{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;visibility:hidden;z-index:0}
 .panel.on{visibility:visible;z-index:10}
 
@@ -306,23 +306,27 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .ce-hours{font-size:13px;color:#0369A1;background:#EFF6FF;border-radius:8px;padding:6px 12px;
   margin-bottom:10px;font-weight:500;line-height:1.4}
 
+
+/* ── DAY NAVIGATOR ── */
+.day-nav-arrow{background:rgba(255,255,255,.18);border:none;color:#fff;
+  width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:background .15s}
+.day-nav-arrow:active{background:rgba(255,255,255,.35)}
+.day-nav-arrow.dim{opacity:.25;pointer-events:none}
+.hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hdr-info{flex:1;min-width:0}
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hdr-top">
-    <div class="hdr-badge">DAY 2</div>
-    <div>
-      <div class="hdr-title">Mt. Rainier Day</div>
-      <div class="hdr-sub">April 16 (Wed) · 9 stops</div>
-    </div>
-  </div>
-  <div class="day-nav-bar">
     <button class="day-nav-arrow" id="dayPrev" onclick="gotoDay(1)">‹</button>
-    <div class="day-nav-center">
-      <div class="day-nav-label">Day 2 / 4</div>
-      <div class="day-nav-sub">April 15 · Mt. Rainier Day</div>
+    <div class="hdr-badge">DAY 2</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Mt. Rainier Day</div>
+      <div class="hdr-sub">April 16 (Wed) · 8 stops</div>
     </div>
     <button class="day-nav-arrow" id="dayNext" onclick="gotoDay(3)">›</button>
   </div>
@@ -409,136 +413,129 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 <script>
 const EVS=[
  {
-  start:'08:15',end:'09:00',dur:45,icon:'🛒',name:'H Mart',
+  start:'08:15',end:'09:00',dur:45,icon:'🛒',name:'H Mart 간식 구매',
   cat:'쇼핑',catBg:'#FEF9C3',catClr:'#713F12',color:'#CA8A04',
-  pid:'ChIJe0-E0TdVkFQRTCJ-E5sVlkI',mapQ:'H+Mart+Downtown+Seattle',
-  lat:47.6085,lng:-122.3394,
-  desc:'레이니어 출발 전 한국 간식·음료·도시락 구매. 롯데호텔에서 도보 약 10분. 컵라면, 김밥, 음료 등 산행 간식 준비.',
+  pid:'ChIJHQcALZNrkFQRACLMa18ItRo',mapQ:'H+Mart+605+5th+Ave+S+Seattle',
+  lat:47.5955,lng:-122.3289,
+  desc:'레이니어 출발 전 한국 간식·음료·도시락 구매. 롯데호텔에서 도보 약 10분 (605 5th Ave S). 삼각김밥, 컵라면, 음료 등 산행 간식 준비.',
   hl:[
-   {i:'★',t:'도시락 코너 — 김밥·유부초밥·삼각김밥 등 산행 도시락',q:'H Mart Korean deli lunch box'},
-   {i:'▸',t:'컵라면 & 스낵 — 산 정상 뜨거운 물 있으면 최고',q:'Korean cup noodles snacks hiking'},
-   {i:'💡',t:'호텔에 차 두고 도보 이동 권장 — 전용 주차장 없음'},
+   {i:'★',t:'삼각김밥·김밥·컵라면 — 산 정상 휴식용 도시락',q:'H Mart Korean deli lunch box'},
+   {i:'▸',t:'에너지바·과자·견과류 — 하이킹 스낵',q:'Korean snacks hiking energy bar'},
+   {i:'💡',t:'물·음료 넉넉히 구매 — Paradise 물가 비쌈'},
+   {i:'💡',t:'핫팩 권장 — 4월 산 정상 매우 추움'},
   ],
-  cost:'$20–40/2인',tr:'도보 10분 (호텔 기준)',note:'',
+  cost:'$10–20',tr:'도보 10분 (호텔 기준)',note:'',
   hours:'매일 8am–10pm',
   photos:[],
  },
  {
-  start:'09:00',end:'11:30',dur:150,icon:'🚗',name:'Mt. Rainier 이동',
+  start:'09:00',end:'11:30',dur:150,icon:'🚗',name:'롯데호텔 출발 → Paradise 직행',
   cat:'이동',catBg:'#F1F5F9',catClr:'#475569',color:'#94A3B8',
-  pid:'',mapQ:'Mt+Rainier+National+Park',
-  lat:46.8800,lng:-121.7269,
-  desc:'호텔에서 WA-706 경유 약 2시간 30분. 아침 일찍 출발해야 Paradise 주차 확보 가능.',
+  pid:'ChIJl3yvuRJrkFQRa1ze_XPfDFo',mapQ:'Lotte+Hotel+Seattle',
+  lat:47.6073,lng:-122.3351,
+  desc:'호텔 렌터카 서비스 탑승. Longmire 스킵, Paradise 직행. WA-706 경로. 약 2시간 30분 소요.',
   hl:[
-   {i:'💡',t:'I-5 South → WA-7 → WA-706 경유 — 네비 따라가면 됨'},
-   {i:'💡',t:'Paradise 주차장은 성수기 오전 10시면 만차 — 일찍 출발 필수'},
+   {i:'⚠',t:'Longmire 스킵 — 직행으로 Paradise 이동 추천'},
+   {i:'▸',t:'WA-706 경로 — 시내 출발 후 산악 도로 진입',q:'WA-706 Mt Rainier scenic drive'},
+   {i:'💡',t:'호텔 렌터카 서비스 9am–6pm — 요금 호텔 확인'},
   ],
-  cost:'주유비',tr:'렌터카',note:'',
+  cost:'-',tr:'호텔 렌터카 서비스 (9am–6pm)',note:'',
   photos:[],
  },
  {
-  start:'11:30',end:'12:15',dur:45,icon:'🏘',name:'Longmire Village',
+  start:'11:30',end:'13:30',dur:120,icon:'🏔',name:'Paradise Visitor Center',
   cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJO8Sb0Vc1kFQR7bfGgqFLM_0',mapQ:'Longmire+Village+Mt+Rainier',
-  lat:46.7498,lng:-121.8122,
-  desc:'공원 입구 인근 역사 마을. 기념품숍, 작은 뮤지엄, 화장실. 간식 보충 후 Paradise로 이동.',
-  hl:[
-   {i:'▸',t:'Longmire Museum — 1916년 개관, 레이니어 역사 전시',q:'Longmire Museum Mt Rainier historic'},
-   {i:'▸',t:'국립공원 기념품숍 — 엽서·배지·마그넷',q:'Mt Rainier National Park gift shop'},
-   {i:'💡',t:'화장실 여기서 꼭 이용 — Paradise까지 한참'},
-  ],
-  cost:'공원 입장료 포함',tr:'렌터카',note:'',
-  hours:'매일 9am–5pm (시즌별 상이)',
-  photos:[],
- },
- {
-  start:'12:15',end:'13:30',dur:75,icon:'🍽',name:'Paradise Visitor Center 점심',
-  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
-  pid:'ChIJR7GXbcoxkFQRWpJkRLSmLNI',mapQ:'Henry+Jackson+Visitor+Center+Mt+Rainier',
+  pid:'ChIJrRbwoGzTkFQRswvHslZeox0',mapQ:'Henry+Jackson+Visitor+Center+Paradise+Mt+Rainier',
   lat:46.7864,lng:-121.7355,
-  desc:'Mt. Rainier 최고 전망 포인트. 카페에서 피자·샌드위치 점심. H Mart 도시락 보충 가능. 레이니어 설경 전망.',
+  desc:'해발 1,646m. Mt. Rainier 최고 명소. 4월 설원+산 정상 뷰 (맑은 날 50–60%). Jackson VC 파노라마 통창 레이니어 정면 조망. 카페테리아 점심.',
   hl:[
-   {i:'★',t:'레이니어 정상 뷰 — 맑은 날 4,392m 설산 정면 조망',q:'Mt Rainier Paradise summit view snow'},
-   {i:'▸',t:'Paradise Inn — 1916년 역사 산장, 로비 무료 입장',q:'Paradise Inn Mt Rainier historic lodge interior'},
-   {i:'💡',t:'공원 입장료 $30/차량 (7일권) — 입구에서 결제'},
+   {i:'★',t:'Jackson VC 파노라마 통창 — 레이니어 정면 조망',q:'Mt Rainier Paradise Henry Jackson Visitor Center panoramic view'},
+   {i:'★',t:'4월 설원에서 레이니어 사진 찬스',q:'Mt Rainier Paradise summit view snow'},
+   {i:'▸',t:'카페테리아 점심 — 버거·수프·핫초코',q:'Mt Rainier Paradise Inn cafeteria food'},
+   {i:'💡',t:'맑은 날 정상 노출 50–60% — 운 좋으면 완전 조망'},
   ],
-  cost:'$30/차량 + 식비 $15–25/인',tr:'렌터카',note:'',
-  hours:'카페 매일 10am–5pm (시즌별)',
+  cost:'$35/차량 7일권 + 점심 $15–25/인',tr:'호텔 렌터카 | Paradise 무료 주차장',note:'',
+  hours:'카페테리아 매일 10am–5pm (시즌별)',
   photos:[],
  },
  {
-  start:'13:30',end:'15:00',dur:90,icon:'🥾',name:'Myrtle Falls Trail',
+  start:'13:30',end:'15:00',dur:90,icon:'🥾',name:'Myrtle Falls 하이킹',
   cat:'하이킹',catBg:'#F0FDF4',catClr:'#14532D',color:'#16A34A',
   pid:'ChIJh5y3J-QxkFQR6EMTRv6wJKA',mapQ:'Myrtle+Falls+Mt+Rainier',
   lat:46.7878,lng:-121.7371,
-  desc:'Paradise에서 출발. 왕복 약 1.5km, 경사 완만. 폭포+레이니어 설경 동시 감상. 운동화 가능.',
+  desc:'Paradise에서 출발. 왕복 1.5km, 고도차 최소. 운동화 가능 (4월 설원 마이크로스파이크 권장). 폭포+레이니어 정상 동시 포착.',
   hl:[
-   {i:'★',t:'Myrtle Falls — 폭포 배경 레이니어 설산 프레임샷 명소',q:'Myrtle Falls Mt Rainier waterfall snow mountain view'},
-   {i:'▸',t:'Skyline Trail 일부 — 고산 초원, 야생화 (4월 눈 덮임)',q:'Mt Rainier Paradise Skyline Trail meadow'},
-   {i:'💡',t:'4월은 눈길 가능 — 워터프루프 신발 권장'},
+   {i:'★',t:'폭포+레이니어 정상 동시 포착 — 나무다리 포토스팟 (시애틀 근교 TOP 5)',q:'Myrtle Falls Mt Rainier waterfall snow mountain view'},
+   {i:'▸',t:'4월 설원 트레일 — 마이크로스파이크 VC 대여 가능',q:'Mt Rainier Paradise Skyline Trail meadow snow'},
+   {i:'💡',t:'왕복 45분~1시간 — 여유롭게 감상'},
   ],
-  cost:'공원 입장료 포함',tr:'Paradise 주차장',note:'',
+  cost:'공원 입장료 포함',tr:'Paradise 주차장',note:'마이크로스파이크 대여 권장',
   photos:[],
  },
  {
   start:'15:00',end:'15:45',dur:45,icon:'🏞',name:'Reflection Lakes',
   cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
-  pid:'ChIJT9X9vdMxkFQRXAOTD4OkI8k',mapQ:'Reflection+Lakes+Mt+Rainier',
+  pid:'ChIJxY2OMk_TkFQRe5fh9R6Hbf4',mapQ:'Reflection+Lakes+Mt+Rainier',
   lat:46.7705,lng:-121.7298,
-  desc:'Paradise에서 차로 5분. 호수에 레이니어 산이 반영되는 인생샷 명소. 주차장에서 바로 감상 가능.',
+  desc:'Paradise에서 차로 10분. 맑은 날 레이니어 산 완전 반사. 주차장 옆 즉시 감상 가능. 15~20분.',
   hl:[
-   {i:'★',t:'Rainier 반영 — 호수 수면에 완벽히 반영되는 설산',q:'Reflection Lakes Mt Rainier reflection mountain'},
-   {i:'💡',t:'4월은 일부 눈 덮임 — 호수 가장자리만 녹아있을 수 있음'},
+   {i:'★',t:'레이니어 산 완전 반영 — 세계 사진작가 명소',q:'Reflection Lakes Mt Rainier reflection mountain'},
+   {i:'▸',t:'4월 잔설+파란 하늘+반영 3중 구도',q:'Reflection Lakes Mt Rainier snow spring blue sky'},
+   {i:'💡',t:'흐린 날 반영 없음 — 맑은 날 필수 방문'},
   ],
-  cost:'공원 입장료 포함',tr:'렌터카 (Paradise에서 5분)',note:'',
+  cost:'공원 입장료 포함',tr:'렌터카 (Paradise에서 10분)',note:'',
   photos:[],
  },
  {
-  start:'15:45',end:'18:15',dur:150,icon:'🚗',name:'Seattle 귀환',
+  start:'16:30',end:'18:30',dur:120,icon:'🚗',name:'Seattle 귀환 출발',
   cat:'이동',catBg:'#F1F5F9',catClr:'#475569',color:'#94A3B8',
-  pid:'',mapQ:'Lotte+Hotel+Seattle',
-  lat:47.6073,lng:-122.3351,
-  desc:'레이니어에서 시애틀까지 약 2시간 30분. 혼잡 시간대 고려해 여유 있게 출발.',
-  hl:[
-   {i:'💡',t:'WA-706 → I-5 North → 시애틀 시내 — 퇴근 시간 혼잡 가능'},
-  ],
-  cost:'주유비',tr:'렌터카',note:'',
-  photos:[],
- },
- {
-  start:'18:15',end:'18:45',dur:30,icon:'🏨',name:'Lotte Hotel 귀환',
-  cat:'숙소',catBg:'#F5F3FF',catClr:'#4C1D95',color:'#7C3AED',
   pid:'ChIJl3yvuRJrkFQRa1ze_XPfDFo',mapQ:'Lotte+Hotel+Seattle',
   lat:47.6073,lng:-122.3351,
-  desc:'호텔 복귀, 짐 정리 및 저녁 준비. 발레파킹 또는 주차 건물 이용.',
+  desc:'WA-706 역방향. 약 2시간 30분 소요. 6pm 이전 호텔 렌터카 반납 목표.',
   hl:[
-   {i:'💡',t:'호텔 주변 주차 $30–40/일 — 발레파킹 요금 확인'},
+   {i:'⚠',t:'6pm 이전 호텔 도착 및 렌터카 반납 목표'},
+   {i:'💡',t:'피크 시간 교통 혼잡 가능 — 여유 있게 출발'},
   ],
-  cost:'숙박비 포함',tr:'렌터카 · 호텔 주차',note:'',
-  hours:'체크인 3pm · 프론트 24시간',
+  cost:'-',tr:'호텔 렌터카 | 6pm 반납 목표',note:'',
   photos:[],
  },
  {
-  start:'18:45',end:'20:30',dur:105,icon:'🍲',name:'Dinner — RAKU Shabu Shabu',
-  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
-  pid:'ChIJa5p6mZ8VkFQRDRWfsTH3P_8',mapQ:'RAKU+Shabu+Shabu+Seattle',
-  lat:47.6150,lng:-122.3202,
-  desc:'Capitol Hill 일본식 샤브샤브. 1인 1냄비 개인 포트. MSG 미사용, 신선한 고기+채소. 식후 소프트아이스크림 무료.',
+  start:'18:30',end:'19:30',dur:60,icon:'🌿',name:'(선택) Gas Works Park',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJf7BbsgIVkFQRlmFJ7KtVbh4',mapQ:'Gas+Works+Park+Seattle',
+  lat:47.6456,lng:-122.3344,
+  desc:'1906년 가스 공장 폐허 위 공원. 언덕 뷰포인트에서 Space Needle+다운타운+Lake Union+수상비행기 한 프레임. 피곤하면 패스 OK.',
   hl:[
-   {i:'★',t:'1인 1냄비 샤브샤브 — 스키야키·마라·토마토 국물 선택',q:'RAKU Shabu Shabu Seattle individual hot pot'},
-   {i:'★',t:'채소 바 무한 리필 — 버섯·두부·채소 셀프 추가',q:'RAKU Shabu Shabu Seattle vegetable bar unlimited'},
-   {i:'▸',t:'소프트아이스크림 — 식후 무료 제공',q:'RAKU Shabu Shabu Seattle soft serve ice cream'},
-   {i:'💡',t:'⚠ 예약 필수 — 오픈테이블 또는 전화 예약'},
+   {i:'★',t:'언덕 뷰포인트 — Space Needle+다운타운+Lake Union 한 프레임',q:'Gas Works Park Seattle hilltop view Space Needle downtown Lake Union'},
+   {i:'▸',t:'대형 붉은 가스 탱크 — 산업유산 이색 포토스팟',q:'Gas Works Park Seattle industrial gas tanks'},
+   {i:'💡',t:'선택 사항 — 피곤하면 패스 OK'},
   ],
-  cost:'$45–65/인',tr:'우버 $10–15 (Capitol Hill)',note:'⚠ 예약 필수',
-  hours:'수–일 5pm–10pm (월·화 휴무)',
+  cost:'Free',tr:'우버/리프트 $12–18 또는 버스 #40 $2.75',note:'선택 사항',
+  photos:[],
+ },
+ {
+  start:'19:30',end:'21:00',dur:90,icon:'🍣',name:'Dinner — I Love Sushi on Lake Union',
+  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
+  pid:'ChIJ4_fDyiQVkFQRkFxG9lkivhs',mapQ:'I+Love+Sushi+Lake+Union+Seattle',
+  lat:47.6270,lng:-122.3367,
+  desc:'1992년 창업. Lake Union 수변 노포. 야외 테라스에서 Space Needle 야경. 수요일 5pm–9pm 영업.',
+  hl:[
+   {i:'★',t:'King Salmon Nigiri — 레몬+소금 마무리, 꿈에 나온다 후기 다수',q:'I Love Sushi Lake Union Seattle king salmon nigiri'},
+   {i:'★',t:'Crunchy Roll — 템푸라 크런치 시그니처 롤',q:'I Love Sushi Seattle crunchy roll'},
+   {i:'▸',t:'Negitoro Tartar — 참치뱃살+아보카도+메추리알',q:'I Love Sushi Seattle negitoro tartar'},
+   {i:'▸',t:'Spicy Tuna Roll — 기본 중 최고 완성도',q:'I Love Sushi Seattle spicy tuna roll'},
+   {i:'💡',t:'입장 시 칠판 스페셜 메뉴 먼저 확인'},
+   {i:'⚠',t:'수요일 5pm–9pm 영업 | 예약 강력 추천'},
+  ],
+  cost:'$40–60/인',tr:'우버/리프트 $10–15 (Gas Works → I Love Sushi)',note:'⚠ 예약 강력 추천',
+  hours:'수요일 5pm–9pm',
   photos:[],
  },
 ];
 
 
 /* ══ CONSTANTS ══ */
-const N=EVS.length, T_START=9*60, T_END=20.5*60, T_SPAN=T_END-T_START;
+const N=EVS.length, T_START=8*60, T_END=21*60, T_SPAN=T_END-T_START;
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
 function eRatio(ev){return(toMin(ev.start)-T_START)/T_SPAN;}
@@ -599,7 +596,7 @@ function buildOverview(){
 
   // banner
   const b=document.createElement('div');b.className='ov-banner';
-  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 15일 (화) · Mt. Rainier Day</div><div class="ov-ds">렌터카 → Hertz 4pm 반납 → 우버/도보 · 09:00–21:30</div></div>`;
+  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 16일 (수) · Mt. Rainier Day</div><div class="ov-ds">호텔 렌터카 9am–6pm → 우버 · 08:15–21:00</div></div>`;
   wrap.appendChild(b);
 
   // timebar — click scrolls to that event in overview
@@ -609,7 +606,7 @@ function buildOverview(){
     const flex=(ev.dur/T_SPAN*100).toFixed(2);
     bh+=`<div class="timebar-seg" title="${ev.start} ${ev.name}" style="flex:${flex};background:${ev.color}" onclick="scrollToOvEvent(${i})"></div>`;
   });
-  bh+=`</div><div class="timebar-ends"><span class="timebar-end">09:00</span><span class="timebar-end">21:30</span></div>`;
+  bh+=`</div><div class="timebar-ends"><span class="timebar-end">08:00</span><span class="timebar-end">21:00</span></div>`;
   tb.innerHTML=bh; wrap.appendChild(tb);
 
   // timeline rows
@@ -641,7 +638,7 @@ function buildOverview(){
     tl.appendChild(row);
   });
   const er=document.createElement('div');er.className='tl-row';
-  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 1 완료</div>`;
+  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:00</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 2 완료</div>`;
   tl.appendChild(er);
   wrap.appendChild(tl);
 }

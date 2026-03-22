@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Day 4 · 체크아웃 → SEA-TAC</title>
+<title>Day 1 · Portland → Seattle</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",sans-serif;background:#F1F5F9;color:#1E293B}
@@ -322,13 +322,13 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 
 <div class="hdr">
   <div class="hdr-top">
-    <button class="day-nav-arrow" id="dayPrev" onclick="gotoDay(3)">‹</button>
-    <div class="hdr-badge">DAY 4</div>
+    <button class="day-nav-arrow dim" id="dayPrev" onclick="gotoDay(0)">‹</button>
+    <div class="hdr-badge">DAY 1</div>
     <div class="hdr-info">
-      <div class="hdr-title">체크아웃 → SEA-TAC</div>
-      <div class="hdr-sub">April 18 (Fri) · 5 stops</div>
+      <div class="hdr-title">Portland → Seattle</div>
+      <div class="hdr-sub">April 15 (Tue) · 10 stops</div>
     </div>
-    <button class="day-nav-arrow dim" id="dayNext" onclick="gotoDay(5)">›</button>
+    <button class="day-nav-arrow" id="dayNext" onclick="gotoDay(2)">›</button>
   </div>
   <div class="tabs">
     <button class="tab on" onclick="showTab(0)">📋 전체 일정</button>
@@ -413,81 +413,254 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 <script>
 const EVS=[
  {
-  start:'09:00',end:'09:30',dur:30,icon:'🏨',name:'체크아웃',
-  cat:'숙소',catBg:'#F5F3FF',catClr:'#4C1D95',color:'#7C3AED',
-  pid:'ChIJl3yvuRJrkFQRa1ze_XPfDFo',mapQ:'Lotte+Hotel+Seattle',
-  lat:47.6073,lng:-122.3351,
-  desc:'짐 정리, 체크아웃. 컨시어지에 우버 픽업 장소 확인. 짐 로비 보관 후 픽업 대기 가능.',
-  hl:[
-   {i:'▸',t:'컨시어지에 우버 픽업 장소 확인'},
-   {i:'💡',t:'짐 로비 보관 후 픽업 대기 가능'},
-   {i:'💡',t:'호텔 조식 있으면 일찍 먹고 출발'},
-  ],
-  cost:'숙박비 정산',tr:'우버/리프트 사전 호출 준비',note:'',
-  hours:'체크아웃 | 프론트 24시간',
-  photos:[],
- },
- {
-  start:'09:30',end:'10:05',dur:35,icon:'🚗',name:'SEA-TAC 공항 출발',
+  start:'09:00',end:'10:00',dur:60,icon:'🚗',name:'Portland Departure',
   cat:'이동',catBg:'#F1F5F9',catClr:'#475569',color:'#94A3B8',
-  pid:'ChIJ_f7qQlVDkFQRtzfcx8TZ05k',mapQ:'Seattle-Tacoma+International+Airport',
-  lat:47.4502,lng:-122.3088,
-  desc:'국제선 2시간 전 도착 목표. 교통 혼잡 시 45분+ 가능. 우버/리프트 $35–50 (25–35분) 또는 Link Light Rail $3.25/인 (Capitol Hill역 → 공항 50분).',
-  hl:[
-   {i:'⚠',t:'국제선 2시간 전 도착 — 10:00 공항 도착 권장'},
-   {i:'▸',t:'우버/리프트: $35–50, 25–35분',q:'Uber Lyft Seattle to SeaTac airport'},
-   {i:'▸',t:'Link Light Rail: Capitol Hill역 → 공항 50분, $3.25/인',q:'Link Light Rail Seattle Capitol Hill to SeaTac airport'},
-   {i:'💡',t:'Capitol Hill역 호텔 도보 10분 — 라이트레일도 OK'},
-  ],
-  cost:'우버 $35–50 또는 라이트레일 $3.25/인',tr:'우버 사전 예약 권장 또는 Link Light Rail',note:'',
-  photos:[],
+  pid:'ChIJB_fxLLcNlVQRzRNBr3y2OcY',mapQ:'Portland+Oregon',lat:45.5234,lng:-122.6762,
+  desc:'I-5 북상 시작. Multnomah Falls는 전날 방문 완료. 총 이동 약 4시간 (경유 포함).',
+  hl:[],cost:'-',tr:'렌터카 · 고속도로 무료',note:'',photos:[],
  },
  {
-  start:'10:05',end:'11:00',dur:55,icon:'✈️',name:'SEA-TAC 도착 + 탑승 수속',
-  cat:'공항',catBg:'#FEF2F2',catClr:'#991B1B',color:'#DC2626',
-  pid:'ChIJ_f7qQlVDkFQRtzfcx8TZ05k',mapQ:'Seattle-Tacoma+International+Airport+Terminal',
-  lat:47.4502,lng:-122.3088,
-  desc:'탑승 수속 + 보안검색. 12:10 출발 기준 10:00 이전 도착 목표. 국제선 터미널 D/S/N 게이트 확인.',
+  start:'10:00',end:'10:45',dur:45,icon:'🌉',name:'Vancouver Waterfront',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJv7hXvLuolVQRGfrYPyLR3TM',mapQ:'Vancouver+Waterfront+Renaissance+Trail+Vancouver+WA',
+  lat:45.628,lng:-122.6739,
+  desc:"Columbia River 북단 워터프론트. Portland 북쪽 15분. Officer's Row 역사 지구와 강변 산책로.",
   hl:[
-   {i:'⚠',t:'국제선 터미널 D/S/N 게이트 확인'},
-   {i:'▸',t:'TSA PreCheck 없는 경우 보안 30–40분 소요'},
-   {i:'💡',t:'면세점: 탑승동 내 기념품 쇼핑'},
+   {i:'★',t:"Officer's Row — 남북전쟁 시대 빅토리아식 장교 관사 22채"},
+   {i:'★',t:'Esther Short Park — Washington 주 최고(最古) 공공 광장 (1853년)',q:'Esther Short Park Vancouver Washington historic plaza'},
+   {i:'▸',t:'Columbia River 데크 — Portland 스카이라인 + Steel Bridge 조망',q:'Columbia River Renaissance Trail waterfront Vancouver WA'},
+   {i:'💡',t:'주차: Columbia Way 노상 $2/hr, 약 45분 체류'},
   ],
-  cost:'없음',tr:'공항 내 이동',note:'⚠ 시간 엄수',
-  hours:'공항 24시간 운영',
-  photos:[],
+  cost:'무료',tr:'렌터카 · 노상 $2/hr',note:'약 45분',hours:'연중무휴 · 산책로 항상 개방 · 무료',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=900&q=80',
+    cap:"Officer's Row 빅토리아식 장교 관사 열",tag:"Officer's Row",
+    poi:"Officer's Row",poiIco:'🏛',src:'Wikimedia Commons',
+    desc:"남북전쟁 시기(1849~1879) 미 육군 장교 22가족이 거주한 빅토리아식 관사 열. 현재 레스토랑·카페·사무실로 운영 중. 미 국가역사등록부 등재."},
+   {url:'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80',
+    cap:'Esther Short Park — WA주 최고(最古) 공원',tag:'Esther Short Park',
+    poi:'Esther Short Park',poiIco:'🌳',src:'Wikimedia Commons',
+    desc:'1853년 공원으로 지정된 Washington 주 최고(最古) 공공 광장. 분수·야외무대·장미 정원이 있어 현지인 쉼터.'},
+   {url:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=900&q=80',
+    cap:'Columbia River 워터프론트 산책로',tag:'포토스팟',
+    poi:'Columbia River 데크',poiIco:'📸',src:'Wikimedia Commons',
+    desc:'Columbia River를 따라 이어지는 산책로에서 Portland 스카이라인과 Steel Bridge를 한 프레임에 담는 포토스팟.'},
+  ],
  },
  {
-  start:'11:00',end:'12:10',dur:70,icon:'🛍',name:'공항 게이트 대기',
-  cat:'공항',catBg:'#FEF2F2',catClr:'#991B1B',color:'#DC2626',
-  pid:'ChIJ_f7qQlVDkFQRtzfcx8TZ05k',mapQ:'Seattle-Tacoma+International+Airport',
-  lat:47.4502,lng:-122.3088,
-  desc:'탑승 게이트에서 대기. 마지막 면세점 쇼핑, 시애틀 기념품 구매 기회.',
+  start:'12:15',end:'13:30',dur:75,icon:'🍽',name:"점심 — Jeremy's Farm to Table",
+  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
+  pid:"ChIJ_V_FqtHhk1QR8ttrpriZOmU",mapQ:"Jeremy%27s+Farm+to+Table+Chehalis+WA",
+  desc:'I-5 Exit 77 바로 옆 Chehalis. 로컬 유기농 팜투테이블 레스토랑.',
+  lat:46.6620,lng:-122.9597,
   hl:[
-   {i:'▸',t:'SEA-TAC 면세점 — 로컬 커피·잼·초콜릿 기념품',q:'Seattle airport duty free gift shop local products'},
-   {i:'▸',t:'Beecher\'s Handmade Cheese — 시애틀 명물 치즈 공항점',q:'Beechers handmade cheese Seattle airport'},
-   {i:'💡',t:'탑승 30분 전 게이트 앞 대기 권장'},
+   {i:'★',t:'Hazelnut Crusted Halibut — 헤이즐넛 크러스트 넙치 (시그니처)'},
+   {i:'★',t:'Stroganoff — 로컬 소고기 크리미 스트로가노프'},
+   {i:'★',t:'Prime Rib Sandwich — 두툼한 프라임립 샌드위치'},
+   {i:'▸',t:'수제 초콜릿 케이크 — 매일 직접 만드는 홈메이드 디저트'},
   ],
-  cost:'쇼핑 개인',tr:'공항 내 이동',note:'',
-  photos:[],
+  cost:'$20–30/인',tr:'렌터카 · 식당 무료 주차',note:'예약 권장',hours:'화–일 10am–9pm (월 휴무) · 예약 권장',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=900&q=80',
+    cap:'Hazelnut Crusted Halibut — 헤이즐넛 크러스트 넙치',tag:'시그니처',
+    poi:'Hazelnut Crusted Halibut',poiIco:'🐟',src:'Unsplash',
+    desc:'태평양 넙치에 헤이즐넛을 코팅해 구운 시그니처. 고소하고 바삭한 크러스트와 흰살 생선의 담백함이 조화. 반드시 주문.'},
+   {url:'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=900&q=80',
+    cap:'Beef Stroganoff — 로컬 소고기 크리미 소스',tag:'Stroganoff',
+    poi:'Stroganoff',poiIco:'🥩',src:'Unsplash',
+    desc:'로컬 농장 소고기를 사용한 크리미 스트로가노프. "역대 최고"라는 후기가 줄을 잇는 인기 메뉴. 달걀 국수와 함께 제공.'},
+   {url:'https://images.unsplash.com/photo-1553909489-cd47e0907980?w=900&q=80',
+    cap:'Prime Rib Sandwich — 두툼한 프라임립',tag:'샌드위치',
+    poi:'Prime Rib Sandwich',poiIco:'🥪',src:'Unsplash',
+    desc:'두툼하게 슬라이스한 프라임립을 빵에 끼운 샌드위치. 넉넉한 양으로 한 끼 완성. 로컬 소고기 사용.'},
+   {url:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=80',
+    cap:'수제 초콜릿 케이크 — 재방문 이유',tag:'디저트',
+    poi:'수제 초콜릿 케이크',poiIco:'🍰',src:'Unsplash',
+    desc:'매일 직접 만드는 홈메이드 케이크. 진한 초콜릿 크림과 부드러운 제누아즈. 재방문 이유로 꼽히는 디저트.'},
+  ],
  },
  {
-  start:'12:10',end:'12:10',dur:0,icon:'🛫',name:'Departure — Flight Home',
-  cat:'출발',catBg:'#F0FDF4',catClr:'#14532D',color:'#16A34A',
-  pid:'',mapQ:'Seattle-Tacoma+International+Airport',
-  lat:47.4502,lng:-122.3088,
-  desc:'12:10 PM 탑승. 4일간의 Portland → Seattle 여행 마무리! 즐거운 비행 되세요 ✈️',
+  start:'13:45',end:'14:45',dur:60,icon:'💧',name:'Snoqualmie Falls',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJwZGNG9F7kFQROK0NWmKwCu0',mapQ:'Snoqualmie+Falls+WA',
+  lat:47.5418,lng:-121.8376,
+  desc:'높이 268ft(82m) 폭포. Washington 주에서 가장 방문객이 많은 자연 명소 중 하나. I-90 East Exit 25 → SR-18 경유. Twin Peaks(1990) 드라마 촬영지.',
   hl:[
-   {i:'★',t:'즐거운 여행이었길! — 다음엔 더 긴 Seattle 여행으로',q:'Seattle travel memories Pacific Northwest'},
+   {i:'★',t:'Upper Observation Deck — 주차장 도보 2분, 폭포 전경 정면 조망 (무료)',q:'Snoqualmie Falls upper observation deck 270ft waterfall'},
+   {i:'▸',t:'Lower Trail — 왕복 약 1.5km, 30분, 폭포 하단 물안개 체험',q:'Snoqualmie Falls lower trail mist base waterfall'},
+   {i:'▸',t:'Salish Lodge & Spa — 절벽 위 1916년 역사 리조트, 로비 무료 입장',q:'Salish Lodge and Spa Snoqualmie Falls cliff historic resort'},
+   {i:'💡',t:'Twin Peaks "Great Northern Hotel" 촬영지 — 드라마 팬이라면 필수',q:'Snoqualmie Falls Twin Peaks filming location Great Northern Hotel'},
   ],
-  cost:'없음',tr:'비행기',note:'',
-  photos:[],
+  cost:'무료',tr:'렌터카 · 상부 무료 주차',note:'약 45분',hours:'연중무휴 · 상부 전망대 일출–일몰 · Salish Lodge 로비 무료',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1591604729960-e9c8f3f27b0b?w=900&q=80',
+    cap:'Snoqualmie Falls — 268ft(82m) 폭포 전경',tag:'메인뷰',
+    poi:'상부 전망대',poiIco:'🌊',src:'Wikimedia Commons / J. Mabel',
+    desc:'주차장에서 도보 2분. 82m 높이 폭포를 정면에서 촬영하기 가장 좋은 뷰포인트. 무료 입장. 이른 아침 물안개가 장관.'},
+   {url:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&q=80',
+    cap:'Lower Trail — 폭포 하단 숲길',tag:'Lower Trail',
+    poi:'Lower Trail',poiIco:'🌲',src:'Wikimedia Commons',
+    desc:'폭포 하단까지 내려가는 왕복 약 1.5km 숲길. 30분 소요. 폭포 물안개를 가까이서 느낄 수 있음. 미끄럼 주의.'},
+   {url:'https://images.unsplash.com/photo-1518602164578-cd0074062767?w=900&q=80',
+    cap:'Salish Lodge & Spa — Twin Peaks 촬영지',tag:'Salish Lodge',
+    poi:'Salish Lodge & Spa',poiIco:'🏨',src:'Wikimedia Commons',
+    desc:'폭포 절벽 위에 세워진 1916년 역사 리조트. 로비는 무료 입장 가능. Twin Peaks 드라마 속 Great Northern Hotel 촬영지.'},
+  ],
+ },
+ {
+  start:'15:00',end:'15:20',dur:20,icon:'🔑',name:'Hertz Car Return',
+  cat:'반납',catBg:'#FEF2F2',catClr:'#991B1B',color:'#DC2626',
+  pid:'ChIJlfENEbVqkFQRS99c2nfV_-Q',mapQ:'Hertz+1501+8th+Ave+Seattle',
+  lat:47.6097,lng:-122.3331,
+  desc:'1501 8th Ave 주차 건물 1층. 늦으면 추가 1일 요금 발생.',
+  hl:[{i:'⚠',t:'반납 마감 4:00 PM — 절대 엄수'},{i:'▸',t:'호텔까지 도보 0.4km (약 6분)'}],
+  cost:'렌터카 계약분',tr:'주차 건물 반납',note:'⚠ 4pm 이전',hours:'월–금 8am–6pm · 토 9am–1pm · 일 휴무 · 반납 마감 4pm',photos:[],
+ },
+ {
+  start:'15:20',end:'16:00',dur:40,icon:'🏨',name:'Lotte Hotel Check-in',
+  cat:'숙소',catBg:'#F5F3FF',catClr:'#4C1D95',color:'#7C3AED',
+  pid:'ChIJl3yvuRJrkFQRa1ze_XPfDFo',mapQ:'Lotte+Hotel+Seattle+809+5th+Ave+Seattle+WA+98104',
+  lat:47.6073,lng:-122.3351,
+  desc:'809 5th Ave. 다운타운 중심. Pike Place Market, Seattle Central Library 도보 5분.',
+  hl:[{i:'▸',t:'Hertz → 호텔 도보 0.4km (약 6분)'},{i:'▸',t:'짐 보관(Luggage Hold) 후 바로 Library 출발 가능'}],
+  cost:'-',tr:'도보 0.4km',note:'',hours:'체크인 3pm · 체크아웃 12pm · 프론트 24시간',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900&q=80',
+    cap:'Lotte Hotel Seattle — 다운타운 5th Ave',tag:'외관',
+    poi:'Lotte Hotel Seattle',poiIco:'🏨',src:'Unsplash',
+    desc:'다운타운 중심 809 5th Ave. Pike Place Market, Central Library 도보 5분. 고층에서 Elliott Bay 조망 가능.'},
+   {url:'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900&q=80',
+    cap:'호텔 로비 — 짐 보관 후 바로 출발',tag:'로비',
+    poi:'호텔 서비스',poiIco:'🛎',src:'Unsplash',
+    desc:'짐 보관 서비스(Luggage Hold) 활용 시 체크인 전후로 자유 이동 가능. 컨시어지에서 레스토랑 예약 지원.'},
+  ],
+ },
+ {
+  start:'16:00',end:'16:50',dur:50,icon:'📚',name:'Seattle Central Library',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJ55fLWVtBkFQR0v31eadEoLM',mapQ:'Seattle+Central+Library',
+  lat:47.6066,lng:-122.3325,
+  desc:'Rem Koolhaas(OMA) + LMN Architects 설계, 2004년 개관. 362,987 sq ft, 11층. AIA 최우수 건축상 수상. 개관 첫 해 하루 평균 8,000명 방문.',
+  hl:[
+   {i:'★',t:'Books Spiral (Floors 6–9) — 나선형 경사로에 비소설 15만 권, 세계 유일',q:'Seattle Central Library Books Spiral ramp Rem Koolhaas'},
+   {i:'★',t:'Level 4 Red Floor — 13가지 빨간 색조로 덮인 회의실 층, 인스타 명소',q:'Seattle Central Library red floor level 4 red carpet meeting rooms'},
+   {i:'▸',t:'3rd Floor Living Room — 50ft 높이 탁 트인 공간, 숨은 문어 벽화 찾기',q:'Seattle Central Library living room 3rd floor open space octopus mural'},
+   {i:'▸',t:'10th Floor Reading Room — 다운타운 + Elliott Bay 최고층 조망',q:'Seattle Central Library 10th floor reading room downtown Elliott Bay view'},
+   {i:'💡',t:'무료 입장 · 월~금 10am–8pm, 토~일 10am–6pm'},
+  ],
+  cost:'무료',tr:'도보 5분 (호텔 기준)',note:'약 50분',hours:'월–금 10am–8pm · 토–일 10am–6pm · 무료입장',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1569012871812-f38ee64cd54c?w=900&q=80',
+    cap:'Seattle Central Library — Rem Koolhaas 설계 외관',tag:'외관',
+    poi:'외관 — 다이아몬드 유리 구조',poiIco:'🏗',src:'Wikimedia Commons / Joe Mabel',
+    desc:'11층, 약 1만 개의 유리창으로 구성된 다이아몬드 격자 외관. NYT 건축 평론가가 "지난 30년간 가장 흥미로운 건물"이라 평했음.'},
+   {url:'https://images.unsplash.com/photo-1571078382619-e1b7f7e6c9b0?w=900&q=80',
+    cap:'Books Spiral — 6~9층 나선형 서가',tag:'Books Spiral',
+    poi:'Books Spiral (6~9층)',poiIco:'📚',src:'Wikimedia Commons',
+    desc:'Rem Koolhaas 설계의 핵심. 6~9층을 나선형 경사로로 연결하며 비소설 15만 권 배치. 휠체어 접근 가능. 세계 유일의 형태.'},
+   {url:'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=900&q=80',
+    cap:'4층 Red Floor — 13가지 빨간 색조',tag:'Red Floor',
+    poi:'4층 Red Floor',poiIco:'🔴',src:'Wikimedia Commons',
+    desc:'13가지 빨간 색조로 벽·천장·바닥·계단을 도배한 회의실 층. 복도 벽면에는 Roberts Rules of Order 전문이 인쇄됨.'},
+  ],
+ },
+ {
+  start:'17:00',end:'18:00',dur:60,icon:'🌅',name:'Kerry Park',
+  cat:'전망',catBg:'#ECFEFF',catClr:'#164E63',color:'#0891B2',
+  pid:'ChIJUS2ELmoVkFQRjrUkJB5o9zM',mapQ:'Kerry+Park+Seattle',
+  lat:47.6294,lng:-122.3597,
+  desc:'Queen Anne Hill 남쪽 경사면, 해발 390ft 위치. 시애틀 스카이라인 사진의 대표 뷰포인트. 1927년 Albert & Katharine Kerry 부부가 시에 기증.',
+  hl:[
+   {i:'★',t:'Skyline View — Space Needle+다운타운+맑은 날 Mt. Rainier 한 컷',q:'Kerry Park Seattle Space Needle skyline Mt Rainier view'},
+   {i:'▸',t:'Parsons Garden — 50m 거리, 영국식 장미 정원 (4월 절정)',q:'Parsons Garden Seattle rose garden April spring bloom'},
+   {i:'💡',t:'4/15 일몰 약 20:00 — 19:30 도착 시 황금빛 Space Needle 포착'},
+   {i:'💡',t:'우버 약 $12~18, 호텔에서 10~15분'},
+  ],
+  cost:'무료',tr:'우버 $12–18',note:'일몰 약 20:00',hours:'연중무휴 24시간 · 무료',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80',
+    cap:'Kerry Park — Space Needle + 다운타운 스카이라인',tag:'메인뷰',
+    poi:'스카이라인 뷰포인트',poiIco:'🌃',src:'Wikimedia Commons / Dllu',
+    desc:'Seattle 인스타그램 대표 각도. Space Needle, 다운타운, 맑은 날 Mt. Rainier까지 3요소를 한 프레임에. 일몰 30분 전 도착 권장.'},
+   {url:'https://images.unsplash.com/photo-1490750967868-88df5691cc8b?w=900&q=80',
+    cap:'Parsons Garden — 영국식 장미 정원',tag:'Parsons Garden',
+    poi:'Parsons Garden',poiIco:'🌹',src:'Wikimedia Commons',
+    desc:'Kerry Park 바로 옆 50m 거리. 4월 봄꽃 절정 시기. 조용하고 한적한 숨은 명소. 결혼 사진 촬영지로도 유명.'},
+   {url:'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900&q=80',
+    cap:'일몰 황금빛 Kerry Park — 골든아워',tag:'일몰',
+    poi:'골든아워 타이밍',poiIco:'🌇',src:'Wikimedia Commons',
+    desc:'4월 15일 시애틀 일몰 약 20:00. 19:30 도착 시 황금빛으로 물드는 Space Needle 포착 가능. 골든아워는 약 20분.'},
+  ],
+ },
+ {
+  start:'18:15',end:'19:30',dur:75,icon:'🛍',name:'Pike Place Market',
+  cat:'관광',catBg:'#EFF6FF',catClr:'#1E40AF',color:'#2563EB',
+  pid:'ChIJy9ZRwbJqkFQRHJ8-Y18dRGA',mapQ:'Pike+Place+Market+Seattle',
+  lat:47.6085,lng:-122.3421,
+  desc:'1907년 개장. 미국에서 가장 오래된 파머스 마켓 중 하나. 연간 1000만 명 방문. Day 3 재방문 예정이므로 오늘은 가볍게 탐방.',
+  hl:[
+   {i:'★',t:'Pike Place Fish Co. — 생선 공중 던지기 퍼포먼스 (1930년 창업)',q:'Pike Place Fish Co fish throwing flying fish market Seattle'},
+   {i:'★',t:'Rachel the Pig — 입구 청동 돼지 저금통, 만지면 행운',q:'Rachel the Pig bronze piggy bank Pike Place Market Seattle'},
+   {i:'▸',t:'Original Starbucks — 1912 Pike Pl, 세계 1호점 (1971년 개점)',q:'Original Starbucks 1912 Pike Place first store 1971 Seattle'},
+   {i:'▸',t:'Post Alley Gum Wall — 지하 골목 껌 아트 명소 (1993년~)',q:'Post Alley Gum Wall Pike Place Seattle underground alley chewing gum art'},
+  ],
+  cost:'무료',tr:'도보 5분 (호텔)',note:'Day 3 재방문',hours:'매일 9am–6pm (상점마다 상이)',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=900&q=80',
+    cap:'Pike Place Market — 1907년 개장 메인 입구',tag:'입구',
+    poi:'Pike Place Market 입구',poiIco:'🏪',src:'Wikimedia Commons',
+    desc:'1907년 개장. 연간 1000만 명이 방문하는 미국 최장수 파머스 마켓 중 하나. Rachel the Pig 청동 돼지가 입구를 지킴.'},
+   {url:'https://images.unsplash.com/photo-1609951651556-5334e2706168?w=900&q=80',
+    cap:'Pike Place Fish Co. — 생선 공중 던지기 퍼포먼스',tag:'Fish Co.',
+    poi:'Pike Place Fish Co.',poiIco:'🐟',src:'Wikimedia Commons',
+    desc:'1930년 창업. 직원들이 주문받은 생선을 공중으로 던지는 퍼포먼스로 유명. 어시장 앞 테라스 측면 각도가 최고.'},
+   {url:'https://images.unsplash.com/photo-1518709414768-a88981a4515d?w=900&q=80',
+    cap:'Post Alley Gum Wall — 수백만 개의 껌 아트',tag:'Gum Wall',
+    poi:'Post Alley Gum Wall',poiIco:'🫧',src:'Wikimedia Commons',
+    desc:'마켓 지하 Post Alley 골목 벽면을 수백만 개의 껌이 덮고 있는 독특한 명소. 1993년부터 자생적으로 형성. 5cm 이상 쌓임.'},
+   {url:'https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=900&q=80',
+    cap:'Original Starbucks — 세계 1호점 (1912 Pike Pl)',tag:'Starbucks 1호점',
+    poi:'Original Starbucks',poiIco:'☕',src:'Wikimedia Commons',
+    desc:'1971년 개점한 세계 1호 스타벅스. 오리지널 머메이드 로고 사용. 30~40분 대기 예상. 기념 텀블러 구입 가능.'},
+  ],
+ },
+ {
+  start:'19:45',end:'21:30',dur:105,icon:'🌿',name:'Dinner — Cafe Flora',
+  cat:'식사',catBg:'#FFFBEB',catClr:'#78350F',color:'#D97706',
+  pid:'ChIJC80ulCxrkFQRucfjtniqYcw',mapQ:'Cafe+Flora+Seattle',
+  lat:47.6229,lng:-122.319,
+  desc:'1991년 창업 채식 파인다이닝. Capitol Hill 위치. 유리 온실 아트리움 인테리어. Seattle 채식 씬의 오랜 터줏대감. 예약 필수.',
+  hl:[
+   {i:'★',t:'Crispy Chickpea Panisse — 병아리콩 케이크, 채식 입문 최적',q:'Cafe Flora Seattle crispy chickpea panisse dish'},
+   {i:'★',t:'Apple & Brie Pizza — 달콤+짭짤 조화, 손이 계속 가는 맛',q:'Cafe Flora Seattle apple brie pizza vegetarian'},
+   {i:'★',t:'Yam Fries — 고구마 튀김, 재주문율 1위 사이드',q:'Cafe Flora Seattle yam fries sweet potato side dish'},
+   {i:'★',t:'Leek Risotto — 리크 크리미 리조또, 단골 최애 메인',q:'Cafe Flora Seattle leek risotto creamy vegetarian entree'},
+   {i:'💡',t:'⚠ 예약 필수 — OpenTable 또는 공식 사이트에서 사전 예약'},
+  ],
+  cost:'$35–50/인',tr:'우버 $12–18',note:'⚠ 예약 필수',hours:'화–목 5–9pm · 금 5–10pm · 토 10am–2pm, 5–10pm · 일 10am–2pm, 5–9pm',
+  photos:[
+   {url:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&q=80',
+    cap:'Crispy Chickpea Panisse — 병아리콩 케이크',tag:'시그니처',
+    poi:'Crispy Chickpea Panisse',poiIco:'⭐',src:'Unsplash',
+    desc:'병아리콩 반죽을 바삭하게 튀긴 시그니처. 겉은 바삭, 속은 크리미. 채식 경험 없어도 만족도 최고. 반드시 주문.'},
+   {url:'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=900&q=80',
+    cap:'Apple & Brie Pizza — 달콤+짭짤 채식 피자',tag:'피자',
+    poi:'Apple & Brie Pizza',poiIco:'🍕',src:'Unsplash',
+    desc:'사과의 달콤함과 브리치즈 고소함의 조화. 얇은 크러스트에 계절 재료 토핑. 처음엔 낯설지만 먹다 보면 손이 계속 감.'},
+   {url:'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=900&q=80',
+    cap:'Yam Fries — 재주문율 1위 고구마 튀김',tag:'사이드',
+    poi:'Yam Fries',poiIco:'🍟',src:'Unsplash',
+    desc:'고구마 튀김. 달콤하고 촉촉. 여러 소스와 함께 제공. 사이드 중 재주문율 1위. 꼭 추가 주문.'},
+   {url:'https://images.unsplash.com/photo-1574484284002-952d92456975?w=900&q=80',
+    cap:'Leek Risotto — 크리미 리크 리조또',tag:'메인',
+    poi:'Leek Risotto',poiIco:'🍚',src:'Unsplash',
+    desc:'리크(대파)를 주 재료로 한 크리미 리조또. 파르메산 대신 비건 치즈 옵션 가능. 단골들의 최애 메인 메뉴.'},
+  ],
  },
 ];
 
-
 /* ══ CONSTANTS ══ */
-const N=EVS.length, T_START=9*60, T_END=12.5*60, T_SPAN=T_END-T_START;
+const N=EVS.length, T_START=9*60, T_END=20.5*60, T_SPAN=T_END-T_START;
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
 function eRatio(ev){return(toMin(ev.start)-T_START)/T_SPAN;}
@@ -548,7 +721,7 @@ function buildOverview(){
 
   // banner
   const b=document.createElement('div');b.className='ov-banner';
-  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 18일 (금) · 체크아웃 → SEA-TAC</div><div class="ov-ds">체크아웃 → 공항 이동 · 09:00–12:10</div></div>`;
+  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 15일 (화) · Portland → Seattle</div><div class="ov-ds">렌터카 → Hertz 4pm 반납 → 우버/도보 · 09:00–21:30</div></div>`;
   wrap.appendChild(b);
 
   // timebar — click scrolls to that event in overview
@@ -558,7 +731,7 @@ function buildOverview(){
     const flex=(ev.dur/T_SPAN*100).toFixed(2);
     bh+=`<div class="timebar-seg" title="${ev.start} ${ev.name}" style="flex:${flex};background:${ev.color}" onclick="scrollToOvEvent(${i})"></div>`;
   });
-  bh+=`</div><div class="timebar-ends"><span class="timebar-end">09:00</span><span class="timebar-end">12:30</span></div>`;
+  bh+=`</div><div class="timebar-ends"><span class="timebar-end">09:00</span><span class="timebar-end">21:30</span></div>`;
   tb.innerHTML=bh; wrap.appendChild(tb);
 
   // timeline rows
@@ -590,7 +763,7 @@ function buildOverview(){
     tl.appendChild(row);
   });
   const er=document.createElement('div');er.className='tl-row';
-  er.innerHTML=`<div class="tl-axis"><div class="tl-time">12:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 4 완료</div>`;
+  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 1 완료</div>`;
   tl.appendChild(er);
   wrap.appendChild(tl);
 }
@@ -1254,7 +1427,7 @@ window.addEventListener('resize',()=>{positionTicks();layoutCards();snapTo(activ
 function gotoDay(n){
   if(n<1||n>4) return;
   const files=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day4_Complete.html'];
-  if(n===4) return; // already here
+  if(n===1) return; // already here
   window.location.href=files[n-1];
 }
 </script>
