@@ -318,35 +318,33 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .hdr-info{flex:1;min-width:0}
 
 /* ── DAY DOTS ── */
-.hdr-title-row{display:flex;align-items:center;gap:8px}
-.hdr-dots{display:flex;gap:5px;align-items:center}
-.day-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
-.day-dot-on{background:#fff;transform:scale(1.25)}
+.hdr-dots-wrap{display:flex;justify-content:center;margin-bottom:5px}
+.hdr-dots{display:flex;gap:4px;align-items:center}
+.day-dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.32);transition:background .2s,transform .2s}
+.day-dot-on{background:#fff;transform:scale(1.3)}
 
-/* ── BIGGER CARD FONTS ── */
-.card-desc{font-size:16px!important;color:#475569;line-height:1.7;margin-bottom:10px}
-.hl-row{font-size:17px!important;line-height:1.6}
-.hl-i{font-size:14px!important}
-.ce-body .hl-row{font-size:17px!important}
-.ce-desc{font-size:16px!important;line-height:1.7}
-.ce-hl-row{font-size:17px!important;line-height:1.6}
-.chip{font-size:15px!important}
+/* ── CARD FONTS ── */
+.card-desc{font-size:15px!important;line-height:1.7;margin-bottom:10px}
+.hl-row{font-size:15px!important;line-height:1.6}
+.ce-body .hl-row{font-size:15px!important;line-height:1.6}
+.ce-desc{font-size:15px!important;line-height:1.7}
+.ce-hl-row{font-size:15px!important;line-height:1.6}
+.ce-body .card-desc{font-size:15px!important;line-height:1.7}
+.chip{font-size:14px!important}
 .card-hours{font-size:13px!important}
 .ce-hours{font-size:14px!important}
-.sc-desc{font-size:16px!important;line-height:1.6}
+.sc-desc{font-size:15px!important;line-height:1.6}
 </style>
 </head>
 <body>
 
 <div class="hdr">
+  <div class="hdr-dots-wrap"><div class="hdr-dots"><div class="day-dot"></div><div class="day-dot  day-dot-on"></div><div class="day-dot"></div><div class="day-dot"></div></div></div>
   <div class="hdr-top">
     <button class="day-nav-arrow" id="dayPrev" onclick="gotoDay(1)">‹</button>
     <div class="hdr-badge">DAY 2</div>
     <div class="hdr-info">
-      <div class="hdr-title-row">
-        <div class="hdr-title" id="hdrTitle"></div>
-        <div class="hdr-dots"><div class="day-dot"></div><div class="day-dot day-dot-on"></div><div class="day-dot"></div><div class="day-dot"></div></div>
-      </div>
+      <div class="hdr-title" id="hdrTitle"></div>
       <div class="hdr-sub" id="hdrSub"></div>
     </div>
     <button class="day-nav-arrow" id="dayNext" onclick="gotoDay(3)">›</button>
