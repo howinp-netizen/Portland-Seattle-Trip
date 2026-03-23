@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Day 2 · Mt. Rainier Day</title>
+<title>Day 1 · Mt. Rainier Day</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",sans-serif;background:#F1F5F9;color:#1E293B}
@@ -19,7 +19,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .tab.on{background:#fff;color:#1E40AF}
 
 /* ── PANELS: visibility switching — layout always alive ── */
-.panels{position:fixed;top:0;left:0;right:0;bottom:0}
+.panels{position:fixed;top:88px;left:0;right:0;bottom:0}
 .panel{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;visibility:hidden;z-index:0}
 .panel.on{visibility:visible;z-index:10}
 
@@ -115,7 +115,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .nav-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid #E2E8F0;background:#F8FAFC;display:flex;align-items:center;justify-content:center;font-size:13px;color:#64748B;cursor:pointer;transition:background .15s,transform .1s;touch-action:manipulation}
 .nav-btn:active{background:#E2E8F0;transform:scale(.9)}
 .nav-btn.dim{opacity:.2;pointer-events:none}
-.card-body{padding:11px 14px 48px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent}
+.card-body{padding:11px 14px 28px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;overscroll-behavior:contain}
 .card-desc{font-size:14px;color:#475569;line-height:1.65;margin-bottom:10px}
 .hl-block{background:#F8FAFC;border-radius:9px;padding:9px 12px;margin-bottom:10px}
 .hl-ttl{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
@@ -236,12 +236,13 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 /* ── CARD SCROLL FADE HINT ── */
 .card-body-wrap{position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
 .card-body-wrap::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:56px;
+  content:'';position:absolute;bottom:0;left:0;right:0;height:32px;
   background:linear-gradient(transparent,rgba(255,255,255,.95));
   pointer-events:none;border-radius:0 0 4px 4px;
   transition:opacity .2s;
 }
 .card-body-wrap.scrolled-end::after{opacity:0}
+.card-body{padding:11px 14px 28px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;overscroll-behavior:contain}
 
 /* ── CARD EXPAND VIEW ── */
 .ce-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(15,23,42,.7);animation:ceFadeIn .18s ease}
@@ -255,7 +256,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .ce-name{font-size:17px;font-weight:800;color:#1E293B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ce-time{font-size:13px;color:#64748B;margin-top:2px}
 .ce-close{background:none;border:none;font-size:20px;color:#94A3B8;padding:4px 8px;cursor:pointer}
-.ce-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent}
+.ce-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;overscroll-behavior:contain}
 .ce-body .card-desc{font-size:15px;color:#334155;line-height:1.6;margin-bottom:14px}
 .ce-body .hl-block{margin-bottom:14px}
 .ce-body .hl-ttl{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
@@ -316,41 +317,56 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .hdr-info{flex:1;min-width:0}
 
-/* ── DAY DOTS ── */
-.hdr-dots-wrap{display:flex;justify-content:center;margin-bottom:5px}
-.hdr-dots{display:flex;gap:4px;align-items:center}
-.day-dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.32);transition:background .2s,transform .2s}
-.day-dot-on{background:#fff;transform:scale(1.3)}
+/* ── HEADER LAYOUT ── */
+.hdr-dots-wrap{display:flex;justify-content:center;padding:5px 0 2px}
+.hdr-dots{display:flex;gap:10px;align-items:center}
+.day-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.32);
+  transition:background .2s,transform .2s;cursor:pointer;
+  padding:8px;box-sizing:content-box;margin:-8px}
+.day-dot-on{background:#fff!important;transform:scale(1.4)!important}
+.day-dot-press{background:rgba(255,255,255,.9)!important;transform:scale(1.8)!important}
+.day-dot-peek{background:rgba(255,255,255,.65)!important;transform:scale(1.3)!important}
+.hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hdr-info{flex:1;min-width:0}
+
+/* ── STICKY TIMEBAR ── */
+#stickyTimebar{position:sticky;top:0;z-index:50;background:#F1F5F9;
+  padding:8px 12px 4px;margin:-10px -12px 6px;border-bottom:1px solid #E2E8F0}
+.timebar-seg-hl{outline:2px solid rgba(0,0,0,.22);outline-offset:-1px;opacity:1!important;
+  filter:brightness(1.15)}
+
+/* ── PANELS / OVERLAY ── */
+.panels{position:fixed;top:0;left:0;right:0;bottom:0}
+#slideOverlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;pointer-events:none;
+  background:linear-gradient(135deg,#1E3A8A,#2563EB);
+  transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1)}
 
 /* ── CARD FONTS ── */
 .card-desc{font-size:15px!important;line-height:1.7;margin-bottom:10px}
 .hl-row{font-size:15px!important;line-height:1.6}
 .ce-body .hl-row{font-size:15px!important;line-height:1.6}
-.ce-desc{font-size:15px!important;line-height:1.7}
-.ce-hl-row{font-size:15px!important;line-height:1.6}
 .ce-body .card-desc{font-size:15px!important;line-height:1.7}
+.ce-hl-row{font-size:15px!important;line-height:1.6}
 .chip{font-size:14px!important}
 .card-hours{font-size:13px!important}
 .ce-hours{font-size:14px!important}
 .sc-desc{font-size:15px!important;line-height:1.6}
 
-/* ── PAGE SLIDE TRANSITION ── */
-#slideOverlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;pointer-events:none;
-  background:linear-gradient(135deg,#1E3A8A,#2563EB);
-  transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1)}
-#slideOverlay.slide-in{transform:translateX(0);pointer-events:all}
-
-/* ── SCROLLBAR STYLING ── */
+/* ── SCROLLBARS ── */
+.card-body{padding:11px 14px 52px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  min-height:0;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent}
 .card-body::-webkit-scrollbar{width:4px}
-.card-body::-webkit-scrollbar-track{background:transparent}
 .card-body::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px}
+.ce-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;
+  overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent}
 .ce-body::-webkit-scrollbar{width:4px}
-.ce-body::-webkit-scrollbar-track{background:transparent}
 .ce-body::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px}
 
-/* ── DOT PRESS HIGHLIGHT ── */
-.day-dot-press{background:rgba(255,255,255,.75)!important;transform:scale(1.6)!important}
-.day-dot-peek{background:rgba(255,255,255,.6)!important;transform:scale(1.15)!important}
+/* ── CARD FADE ── */
+.card-body-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52px;
+  background:linear-gradient(transparent,rgba(255,255,255,.95));
+  pointer-events:none;border-radius:0 0 4px 4px;transition:opacity .2s}
+.card-body-wrap.scrolled-end::after{opacity:0}
 </style>
 </head>
 <body>
@@ -574,15 +590,14 @@ const EVS=[
 /* ══ CONSTANTS ══ */
 const N=EVS.length;
 document.getElementById('hdrTitle').textContent='Mt. Rainier Day';
-document.getElementById('hdrSub').textContent='April 16 (Thu) · '+N+' stops';
-const T_START=8*60, T_END=21*60, T_SPAN=T_END-T_START;
+document.getElementById('hdrSub').textContent='April 16 (Thu) · '+N+' stops';, T_START=8*60, T_END=21*60, T_SPAN=T_END-T_START;
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
 function eRatio(ev){return(toMin(ev.start)-T_START)/T_SPAN;}
 
 /* ══ SHARED STATE ══ */
-let activeIdx=0;   // current event index (shared between all tabs)
-let ceLastIdx=0;   // last event index viewed in card expand
+let activeIdx=0;
+let ceLastIdx=0;
 let curTab=0;
 
 /* ══════════════════════════════════
@@ -634,15 +649,22 @@ function scrollToOvEvent(i){
 
 function buildOverview(){
   const wrap=document.getElementById('ovScroll');
-  // timebar — click scrolls to that event in overview
-  const tb=document.createElement('div');tb.className='timebar-wrap';
-  let bh=`<div class="timebar-lbl">타임바 — 탭하면 해당 일정으로 이동</div><div class="timebar">`;
+
+  // banner
+  const b=document.createElement('div');b.className='ov-banner';
+  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 15일 (화) · Mt. Rainier Day</div><div class="ov-ds">렌터카 → Hertz 4pm 반납 → 우버/도보 · 09:00–21:30</div></div>`;
+  wrap.appendChild(b);
+
+  // timebar — sticky + scroll highlight
+  const tbOuter=document.createElement('div'); tbOuter.id='stickyTimebar';
+  const tb=document.createElement('div');tb.className='timebar-wrap';tb.style.marginBottom='0';
+  let bh=`<div class="timebar-lbl">타임바 — 탭하면 해당 일정으로 이동</div><div class="timebar" id="theTimebar">`;
   EVS.forEach((ev,i)=>{
     const flex=(ev.dur/T_SPAN*100).toFixed(2);
-    bh+=`<div class="timebar-seg" title="${ev.start} ${ev.name}" style="flex:${flex};background:${ev.color}" onclick="scrollToOvEvent(${i})"></div>`;
+    bh+=`<div class="timebar-seg" id="tseg-${i}" title="${ev.start} ${ev.name}" style="flex:${flex};background:${ev.color}" onclick="scrollToOvEvent(${i})"></div>`;
   });
   bh+=`</div><div class="timebar-ends"><span class="timebar-end">08:00</span><span class="timebar-end">21:00</span></div>`;
-  tb.innerHTML=bh; wrap.appendChild(tb);
+  tb.innerHTML=bh; tbOuter.appendChild(tb); wrap.appendChild(tbOuter);
 
   // timeline rows
   const tl=document.createElement('div');tl.className='tl';
@@ -673,7 +695,7 @@ function buildOverview(){
     tl.appendChild(row);
   });
   const er=document.createElement('div');er.className='tl-row';
-  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:00</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 2 완료</div>`;
+  er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 2 완료</div>`;
   tl.appendChild(er);
   wrap.appendChild(tl);
 }
@@ -1189,191 +1211,314 @@ function closePopup(){
 // photo swipe removed (no photo section)
 
 // Right panel: horizontal swipe → next/prev slide
+(function(){
+  var pr=document.getElementById('popRight');
+  var x0=0,y0=0,locked=null;
+  pr.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY;locked=null;},{passive:true});
+  pr.addEventListener('touchmove',function(e){
+    if(locked==='v')return;
+    var dx=Math.abs(e.touches[0].clientX-x0),dy=Math.abs(e.touches[0].clientY-y0);
+    if(!locked){if(dx>8&&dx>dy)locked='h';else if(dy>8)locked='v';}
+    if(locked==='h')e.preventDefault();
+  },{passive:false});
+  pr.addEventListener('touchend',function(e){
+    if(locked!=='h')return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>40){
+      const slides=document.querySelectorAll('.poi-slide');
+      const n=slides.length;
+      if(n>0) selectHl((popIdx+(dx<0?1:-1)+n)%n);
+    }
+    locked=null;
+  },{passive:true});
+}());
+
+// Close: X button + background tap
+document.getElementById('popX').addEventListener('click',closePopup);
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))closePopup();});
+
+
+// Popup header drag-to-close
+(()=>{
+  const hd=document.getElementById('popHd'),box=document.getElementById('popupBox');
+  let sy=0,st=0,drag=false;
+  hd.addEventListener('pointerdown',e=>{hd.setPointerCapture(e.pointerId);sy=e.clientY;st=Date.now();drag=true;box.style.transition='none';});
+  hd.addEventListener('pointermove',e=>{if(!drag)return;const dy=Math.max(0,e.clientY-sy);box.style.transform=`translateY(${dy}px)`;});
+  hd.addEventListener('pointerup',e=>{
+    if(!drag)return;drag=false;
+    const dy=e.clientY-sy,dt=Date.now()-st;
+    if(dy>80||(dy>40&&dt<250)) closePopup();
+    else{box.style.transition='transform .2s ease';box.style.transform='';setTimeout(()=>box.style.transition='',200);}
+  });
+  hd.addEventListener('pointercancel',()=>{drag=false;box.style.transition='transform .2s ease';box.style.transform='';setTimeout(()=>box.style.transition='',200);});
+})();
+
+// split handle drag disabled — fixed ratio
+
+
+
+/* ══ CARD EXPAND VIEW ══ */
+function openCardExpand(evIdx){
+  if(evIdx<0||evIdx>=N) return;
+  ceLastIdx=evIdx;
+  activeIdx=evIdx;
+  const ev=EVS[evIdx];
+
+  // Header
+  const icon=document.getElementById('ceIcon');
+  icon.textContent=ev.icon; icon.style.background=ev.color+'20';
+  document.getElementById('ceName').textContent=ev.name;
+  document.getElementById('ceTime').textContent=
+    ev.start+' – '+ev.end+'  ·  '+ev.cat+'  ·  ⏱ '+durLabel(ev.dur);
+
+  // Nav
+  const nav=document.getElementById('ceNav');
+  nav.innerHTML=
+    `<button class="ce-nav-btn${evIdx===0?' dim':''}" onclick="openCardExpand(${evIdx-1})">▲ 이전</button>`+
+    `<span class="ce-nav-idx">${evIdx+1} / ${N}</span>`+
+    `<button class="ce-nav-btn${evIdx===N-1?' dim':''}" onclick="openCardExpand(${evIdx+1})">다음 ▼</button>`;
+
+  // Body
+  const body=document.getElementById('ceBody');
+  const hlH=ev.hl.length
+    ?`<div class="hl-block"><div class="hl-ttl">${ev.cat==='식사'?'추천 메뉴':'하이라이트'}</div>${ev.hl.map(h=>`<div class="ce-hl-row"><span class="hl-i">${h.i}</span><span>${h.t}</span></div>`).join('')}</div>`
+    :'';
+  const wc=ev.note.includes('⚠')?' warn':'';
+  body.innerHTML=
+    (ev.hours?`<div class="ce-hours">🕐 ${ev.hours}</div>`:'')+
+    `<div class="card-desc">${ev.desc}</div>`+
+    hlH+
+    `<div class="chips"><span class="chip cost">💰 ${ev.cost}</span><span class="chip">🚌 ${ev.tr}</span>${ev.note?`<span class="chip${wc}">${ev.note}</span>`:''}</div>`;
+  body.scrollTop=0;
+
+  // Footer
+  const foot=document.getElementById('ceFoot');
+  const hasHl=ev.hl.some(h=>h.q);
+  foot.innerHTML=
+    (ev.pid?`<button class="btn btn-blue" onclick="openGM(${evIdx},'map')">📍 지도</button>`+
+            `<button class="btn btn-green" onclick="openGM(${evIdx},'nav')">🧭 길찾기</button>`:'') +
+    (hasHl?`<button class="btn ${ev.cat==='식사'?'btn-amber':'btn-purple'}" onclick="openPopup(${evIdx})">`+
+           `${ev.cat==='식사'?'🍴 메뉴':'📍 하이라이트'}</button>`:'');
+
+  document.getElementById('ceOverlay').classList.add('on');
+  document.getElementById('ceBox').style.transform='';
+}
+
+function closeCardExpand(){
+  const box=document.getElementById('ceBox');
+  box.style.transition='transform .22s ease';
+  box.style.transform='translateY(100%)';
+  if(ceLastIdx!==activeIdx) activeIdx=ceLastIdx;
+  setTimeout(()=>{
+    document.getElementById('ceOverlay').classList.remove('on');
+    box.style.transition=''; box.style.transform='';
+    snapTo(ceLastIdx,false); renderTicks(ceLastIdx);
+  },220);
+}
+
+// Swipe-down to close
+(()=>{
+  const box=document.getElementById('ceBox');
+  let sy=0,st=0,dragging=false;
+  box.addEventListener('pointerdown',e=>{
+    if(e.target.closest('button')||e.target.closest('.ce-body')) return;
+    sy=e.clientY; st=Date.now(); dragging=true;
+    box.setPointerCapture(e.pointerId);
+    box.style.transition='none';
+  });
+  box.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    const dy=Math.max(0,e.clientY-sy);
+    box.style.transform=`translateY(${dy}px)`;
+  });
+  box.addEventListener('pointerup',e=>{
+    if(!dragging) return; dragging=false;
+    const dy=e.clientY-sy;
+    const fast=Date.now()-st<300&&dy>40;
+    if(dy>100||fast) closeCardExpand();
+    else{box.style.transition='transform .2s ease';box.style.transform='';}
+  });
+})();
+document.getElementById('ceOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('ceOverlay'))closeCardExpand();
+});
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+buildOverview();
+initTimebarHighlight();
+buildSchedule();
+buildTicks();
+requestAnimationFrame(()=>requestAnimationFrame(initCardScrollHints));
+
+requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  positionTicks(); layoutCards(); snapTo(0,false);
+}));
+window.addEventListener('resize',()=>{positionTicks();layoutCards();snapTo(activeIdx,false);});
 
 
 /* ══ DAY NAVIGATION ══ */
+
+
+function fitPanels(){
+  const h=document.querySelector('.hdr').getBoundingClientRect().height;
+  document.querySelector('.panels').style.top=h+'px';
+}
+fitPanels();
+window.addEventListener('resize',fitPanels);
+
+function initTimebarHighlight(){
+  const sc=document.getElementById('ovScroll');
+  if(!sc) return;
+  let lastHl=-1;
+  function highlightSeg(i){
+    if(i===lastHl) return;
+    if(lastHl>=0){const o=document.getElementById('tseg-'+lastHl);if(o)o.classList.remove('timebar-seg-hl');}
+    const el=document.getElementById('tseg-'+i);
+    if(el)el.classList.add('timebar-seg-hl');
+    lastHl=i;
+  }
+  function findVisible(){
+    // Near bottom? → highlight last event
+    if(sc.scrollTop+sc.clientHeight>=sc.scrollHeight-24){highlightSeg(EVS.length-1);return;}
+    // Otherwise: find the lowest event whose top edge is above the viewport midpoint
+    const scTop=sc.getBoundingClientRect().top;
+    const mid=sc.clientHeight*0.5;
+    let best=0;
+    for(let i=0;i<EVS.length;i++){
+      const el=document.getElementById('ov-ev-'+i);
+      if(!el) continue;
+      const top=el.getBoundingClientRect().top-scTop;
+      if(top<=mid) best=i; else break;
+    }
+    highlightSeg(best);
+  }
+  sc.addEventListener('scroll',findVisible,{passive:true});
+  requestAnimationFrame(findVisible);
+}
+/* ══ DAY NAV ══ */
 const FILES=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day4_Complete.html'];
 const CURRENT_DAY=2;
 
-function updateDots(progress){
-  // progress: -1..0..+1  (negative=going back, positive=going forward)
+function setDotProgress(p){
   for(let i=1;i<=4;i++){
     const el=document.getElementById('dot'+i);
     if(!el) continue;
-    el.className='day-dot' + (i===CURRENT_DAY?' day-dot-on':'');
-  }
-  if(Math.abs(progress) > 0.05){
-    const targetDay = progress > 0 ? CURRENT_DAY+1 : CURRENT_DAY-1;
-    const t=document.getElementById('dot'+targetDay);
-    const c=document.getElementById('dot'+CURRENT_DAY);
-    const abs=Math.min(Math.abs(progress),1);
-    if(t){ t.style.background=`rgba(255,255,255,${0.32+abs*0.68})`; t.style.transform=`scale(${1+abs*0.3})`; }
-    if(c){ c.style.background=`rgba(255,255,255,${1-abs*0.5})`; c.style.transform=`scale(${1.3-abs*0.3})`; }
-  } else {
-    // reset inline styles so CSS classes take over
-    for(let i=1;i<=4;i++){
-      const el=document.getElementById('dot'+i);
-      if(el){el.style.background='';el.style.transform='';}
+    if(i===CURRENT_DAY){
+      const f=Math.min(Math.abs(p),1);
+      el.style.background=`rgba(255,255,255,${1-f*0.6})`;
+      el.style.transform=`scale(${1.4-f*0.35})`;
+    } else {
+      const td=p>0?CURRENT_DAY+1:CURRENT_DAY-1;
+      if(i===td&&Math.abs(p)>0.02){
+        const g=Math.min(Math.abs(p),1);
+        el.style.background=`rgba(255,255,255,${0.32+g*0.68})`;
+        el.style.transform=`scale(${1+g*0.45})`;
+      } else {
+        el.style.background=''; el.style.transform='';
+      }
     }
+  }
+}
+function resetDots(){
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById('dot'+i);
+    if(!el) continue;
+    el.style.background=''; el.style.transform='';
+    el.className='day-dot'+(i===CURRENT_DAY?' day-dot-on':'');
   }
 }
 
 function gotoDay(n){
   if(n<1||n>4||n===CURRENT_DAY) return;
-  const dir = n > CURRENT_DAY ? -1 : 1;
-  const hdrTop = document.querySelector('.hdr-top');
-  const ov = document.getElementById('slideOverlay');
-
-  // Fit overlay to panels area
-  const panelsEl = document.querySelector('.panels');
-  if(panelsEl){
-    const t=panelsEl.style.top||getComputedStyle(panelsEl).top;
-    ov.style.top=t; ov.style.bottom='0'; ov.style.left='0'; ov.style.right='0';
-  }
-
-  // Slide hdr-top out
-  if(hdrTop){
-    hdrTop.style.transition='transform .28s cubic-bezier(.4,0,.2,1)';
-    hdrTop.style.transform=`translateX(${dir*110}%)`;
-  }
-  // Animate dots to full target state
-  updateDots(dir < 0 ? 1 : -1);
-
-  // Slide panel overlay in from opposite side
-  ov.style.transition='none';
-  ov.style.transform=`translateX(${-dir*100}%)`;
+  const dir=n>CURRENT_DAY?-1:1;
+  const hdrTop=document.querySelector('.hdr-top');
+  const ov=document.getElementById('slideOverlay');
+  const panelsEl=document.querySelector('.panels');
+  if(panelsEl){ const t=panelsEl.style.top||getComputedStyle(panelsEl).top; ov.style.top=t; ov.style.bottom='0'; ov.style.left='0'; ov.style.right='0'; }
+  if(hdrTop){ hdrTop.style.transition='transform .28s cubic-bezier(.4,0,.2,1)'; hdrTop.style.transform=`translateX(${dir*110}%)`; }
+  setDotProgress(dir<0?1:-1);
+  ov.style.transition='none'; ov.style.transform=`translateX(${-dir*100}%)`;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    ov.style.transition='transform .28s cubic-bezier(.4,0,.2,1)';
-    ov.style.transform='translateX(0)';
-    ov.addEventListener('transitionend',()=>{ window.location.href=FILES[n-1]; },{once:true});
+    ov.style.transition='transform .28s cubic-bezier(.4,0,.2,1)'; ov.style.transform='translateX(0)';
+    ov.addEventListener('transitionend',()=>{window.location.href=FILES[n-1];},{once:true});
   }));
 }
 
-/* ── SWIPE: hdr-top only, dots stay fixed ── */
 (function(){
-  const zone    = document.querySelector('.hdr-top');
-  const hdrTop  = zone;
+  const zone=document.querySelector('.hdr-top');
   if(!zone) return;
-
   let sx=0,sy=0,tracking=false,committed=false,axisLocked=null;
   const W=()=>window.innerWidth;
-
-  zone.addEventListener('touchstart',e=>{
-    sx=e.touches[0].clientX; sy=e.touches[0].clientY;
-    tracking=true; committed=false; axisLocked=null;
-    hdrTop.style.transition='none';
-  },{passive:true});
-
+  zone.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;tracking=true;committed=false;axisLocked=null;zone.style.transition='none';},{passive:true});
   zone.addEventListener('touchmove',e=>{
     if(!tracking||committed) return;
-    const dx=e.touches[0].clientX-sx;
-    const dy=e.touches[0].clientY-sy;
-    if(!axisLocked&&(Math.abs(dx)>6||Math.abs(dy)>6))
-      axisLocked=Math.abs(dx)>Math.abs(dy)?'x':'y';
+    const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+    if(!axisLocked&&(Math.abs(dx)>6||Math.abs(dy)>6)) axisLocked=Math.abs(dx)>Math.abs(dy)?'x':'y';
     if(axisLocked!=='x') return;
-
-    const canLeft=CURRENT_DAY<4, canRight=CURRENT_DAY>1;
-    let clamped=dx;
-    if(dx<0&&!canLeft)  clamped=dx*0.15;
-    if(dx>0&&!canRight) clamped=dx*0.15;
-    const damp=Math.abs(clamped)>W()*0.4
-      ?Math.sign(clamped)*(W()*0.4+(Math.abs(clamped)-W()*0.4)*0.2):clamped;
-
-    hdrTop.style.transform=`translateX(${damp}px)`;
-    // Update dots based on progress ratio
-    const progress = damp / W();   // -0.4..0..+0.4 → negative=going fwd (left swipe)
-    updateDots(-progress);         // invert: swipe left (neg dx) = going forward (+)
+    const canL=CURRENT_DAY<4, canR=CURRENT_DAY>1;
+    let d=dx;
+    if(dx<0&&!canL) d=dx*0.15;
+    if(dx>0&&!canR) d=dx*0.15;
+    const damp=Math.abs(d)>W()*.4?Math.sign(d)*(W()*.4+(Math.abs(d)-W()*.4)*.2):d;
+    zone.style.transform=`translateX(${damp}px)`;
+    setDotProgress(-damp/(W()*.4));
   },{passive:true});
-
   zone.addEventListener('touchend',e=>{
     if(!tracking) return; tracking=false;
-    const dx=e.changedTouches[0].clientX-sx;
-    const dy=e.changedTouches[0].clientY-sy;
+    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
     if(axisLocked!=='x'||Math.abs(dx)<40||Math.abs(dx)<Math.abs(dy)*1.5){
-      hdrTop.style.transition='transform .22s cubic-bezier(.4,0,.2,1)';
-      hdrTop.style.transform='translateX(0)';
-      updateDots(0);
-      return;
+      zone.style.transition='transform .22s cubic-bezier(.4,0,.2,1)'; zone.style.transform='translateX(0)'; resetDots(); return;
     }
     committed=true;
-    const targetDay=dx<0?CURRENT_DAY+1:CURRENT_DAY-1;
-    if(targetDay<1||targetDay>4){
-      hdrTop.style.transition='transform .22s cubic-bezier(.4,0,.2,1)';
-      hdrTop.style.transform='translateX(0)';
-      updateDots(0);
-      return;
-    }
-    hdrTop.style.transform='translateX(0)';
-    gotoDay(targetDay);
+    const tgt=dx<0?CURRENT_DAY+1:CURRENT_DAY-1;
+    if(tgt<1||tgt>4){ zone.style.transition='transform .22s cubic-bezier(.4,0,.2,1)'; zone.style.transform='translateX(0)'; resetDots(); return; }
+    zone.style.transform='translateX(0)'; gotoDay(tgt);
   },{passive:true});
 })();
 
-/* ── DOT LONG-PRESS → navigate to that day ── */
 (function(){
-  let pressTimer=null, pressedDay=null, hoveredDay=null;
-
-  function startPress(dayN, el){
-    pressedDay=dayN; hoveredDay=dayN;
-    el.classList.add('day-dot-press');
-    pressTimer=setTimeout(()=>{
-      // committed — now allow drag to other dots
-      pressTimer=null;
-    },300);
-  }
-
-  function endPress(commit){
-    if(pressTimer){clearTimeout(pressTimer);pressTimer=null;}
-    // reset all dots
+  const DOT_AREA=document.querySelector('.hdr-dots');
+  if(!DOT_AREA) return;
+  let active=false, pressedDay=null, hoveredDay=null;
+  function dotFromTouch(t){
     for(let i=1;i<=4;i++){
-      const d=document.getElementById('dot'+i);
-      if(d){d.classList.remove('day-dot-press','day-dot-peek');d.style.background='';d.style.transform='';}
+      const el=document.getElementById('dot'+i);
+      if(!el) continue;
+      const r=el.getBoundingClientRect();
+      if(t.clientX>=r.left-12&&t.clientX<=r.right+12&&t.clientY>=r.top-12&&t.clientY<=r.bottom+12) return i;
     }
-    if(commit && hoveredDay && hoveredDay!==CURRENT_DAY) gotoDay(hoveredDay);
+    return null;
+  }
+  function showHover(d){
+    for(let i=1;i<=4;i++){
+      const el=document.getElementById('dot'+i);
+      if(!el) continue;
+      el.className='day-dot'+(i===CURRENT_DAY?' day-dot-on':'');
+      el.style.background=''; el.style.transform='';
+      if(i===pressedDay&&i!==d) el.classList.add('day-dot-press');
+      if(i===d) el.classList.add(d===CURRENT_DAY?'day-dot-on':'day-dot-peek');
+    }
+  }
+  DOT_AREA.addEventListener('touchstart',e=>{
+    const d=dotFromTouch(e.touches[0]);
+    if(!d) return; e.stopPropagation();
+    pressedDay=d; hoveredDay=d; active=true; showHover(d);
+  },{passive:true});
+  DOT_AREA.addEventListener('touchmove',e=>{
+    if(!active) return; e.stopPropagation();
+    const d=dotFromTouch(e.touches[0]);
+    if(d&&d!==hoveredDay){ hoveredDay=d; showHover(d); }
+  },{passive:true});
+  function endDrag(commit){
+    active=false;
+    if(commit&&hoveredDay&&hoveredDay!==CURRENT_DAY) gotoDay(hoveredDay);
+    else resetDots();
     pressedDay=null; hoveredDay=null;
   }
-
-  function getDotFromTouch(touch){
-    const el=document.elementFromPoint(touch.clientX, touch.clientY);
-    if(!el) return null;
-    const m=el.id && el.id.match(/^dot(\d)$/);
-    return m ? parseInt(m[1]) : null;
-  }
-
-  for(let i=1;i<=4;i++){
-    (function(dayN){
-      const el=document.getElementById('dot'+dayN);
-      if(!el) return;
-
-      el.addEventListener('touchstart',e=>{
-        e.stopPropagation();
-        startPress(dayN, el);
-      },{passive:true});
-
-      el.addEventListener('touchmove',e=>{
-        if(pressedDay===null) return;
-        e.stopPropagation();
-        const d=getDotFromTouch(e.touches[0]);
-        if(d && d!==hoveredDay){
-          // Un-highlight previous
-          for(let j=1;j<=4;j++){
-            const dj=document.getElementById('dot'+j);
-            if(dj){dj.classList.remove('day-dot-press','day-dot-peek');}
-          }
-          hoveredDay=d;
-          const target=document.getElementById('dot'+d);
-          if(target) target.classList.add(d===pressedDay?'day-dot-press':'day-dot-peek');
-        }
-      },{passive:true});
-
-      el.addEventListener('touchend',e=>{
-        if(pressedDay===null) return;
-        e.stopPropagation();
-        endPress(true);
-      },{passive:true});
-
-      el.addEventListener('touchcancel',()=>endPress(false));
-    })(i);
-  }
+  DOT_AREA.addEventListener('touchend',e=>{ e.stopPropagation(); endDrag(true); },{passive:true});
+  DOT_AREA.addEventListener('touchcancel',()=>endDrag(false));
 })();
 
 </script>
