@@ -334,10 +334,17 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .card-hours{font-size:13px!important}
 .ce-hours{font-size:14px!important}
 .sc-desc{font-size:15px!important;line-height:1.6}
+
+/* ── PAGE SLIDE TRANSITION ── */
+#slideOverlay{position:fixed;inset:0;z-index:999;pointer-events:none;
+  background:linear-gradient(135deg,#1E3A8A,#2563EB);
+  transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1)}
+#slideOverlay.slide-in{transform:translateX(0);pointer-events:all}
 </style>
 </head>
 <body>
 
+<div id="slideOverlay"></div>
 <div class="hdr">
   <div class="hdr-dots-wrap"><div class="hdr-dots"><div class="day-dot"></div><div class="day-dot"></div><div class="day-dot  day-dot-on"></div><div class="day-dot"></div></div></div>
   <div class="hdr-top">
@@ -575,7 +582,7 @@ const EVS=[
 /* ══ CONSTANTS ══ */
 const N=EVS.length;
 document.getElementById('hdrTitle').textContent='Skagit 튤립 + 페리 + 시내';
-document.getElementById('hdrSub').textContent='April 17 (Thu) · '+N+' stops';
+document.getElementById('hdrSub').textContent='April 17 (Fri) · '+N+' stops';
 const T_START=8*60, T_END=20*60, T_SPAN=T_END-T_START;
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
@@ -1345,8 +1352,18 @@ window.addEventListener('resize',()=>{positionTicks();layoutCards();snapTo(activ
 function gotoDay(n){
   if(n<1||n>4) return;
   const files=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day4_Complete.html'];
-  if(n===3) return; // already here
-  window.location.href=files[n-1];
+  if(n===3) return;
+  const dir=n>3?1:-1;  // 1=left slide, -1=right slide
+  const ov=document.getElementById('slideOverlay');
+  ov.style.transform=`translateX(${dir*100}%)`
+  ov.style.transition='none';
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      ov.style.transition='transform .32s cubic-bezier(.4,0,.2,1)';
+      ov.style.transform='translateX(0)';
+      ov.addEventListener('transitionend',()=>{ window.location.href=files[n-1]; },{once:true});
+    });
+  });
 }
 
 /* ── HEADER SWIPE ── */
