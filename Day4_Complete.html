@@ -330,8 +330,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .hdr-info{flex:1;min-width:0}
 
 /* ── STICKY TIMEBAR ── */
-#stickyTimebar{position:sticky;top:0;z-index:50;background:#F1F5F9;
-  padding:8px 12px 4px;margin:-10px -12px 6px;border-bottom:1px solid #E2E8F0}
+#stickyTimebar{position:sticky;top:0;z-index:50;background:#F1F5F9;padding:6px 12px 4px;margin:-10px -12px 8px;border-bottom:1px solid #E2E8F0}
 .timebar-seg-hl{outline:2px solid rgba(0,0,0,.22);outline-offset:-1px;opacity:1!important;
   filter:brightness(1.15)}
 
@@ -397,14 +396,14 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 
   <!-- TAB 1: MAP -->
   <div class="panel" id="pan1">
-    <div class="deck-wrap" id="deckWrap"><div class="deck" id="deck"></div></div>
-    <div class="deck-dots" id="dots"></div>
-    <div class="mini-wrap"><div class="mini-row" id="mini"></div></div>
     <div class="map-box" id="mapBox">
       <div class="map-spin" id="mapSpin">지도 불러오는 중…</div>
       <iframe id="mapIframe" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
       <button class="route-btn" id="routeBtn" onclick="toggleRoute()">🗺 전체 동선</button>
     </div>
+    <div class="deck-wrap" id="deckWrap"><div class="deck" id="deck"></div></div>
+    <div class="deck-dots" id="dots"></div>
+    <div class="mini-wrap"><div class="mini-row" id="mini"></div></div>
   </div>
 
   <!-- TAB 2: SCHEDULE -->
@@ -601,12 +600,6 @@ function scrollToOvEvent(i){
 
 function buildOverview(){
   const wrap=document.getElementById('ovScroll');
-
-  // banner
-  const b=document.createElement('div');b.className='ov-banner';
-  b.innerHTML=`<div class="ov-d">D1</div><div><div class="ov-dt">4월 15일 (화) · Departure Day</div><div class="ov-ds">렌터카 → Hertz 4pm 반납 → 우버/도보 · 09:00–21:30</div></div>`;
-  wrap.appendChild(b);
-
   // timebar — sticky + scroll highlight
   const tbOuter=document.createElement('div'); tbOuter.id='stickyTimebar';
   const tb=document.createElement('div');tb.className='timebar-wrap';tb.style.marginBottom='0';
@@ -629,7 +622,7 @@ function buildOverview(){
     row.innerHTML=`
       <div class="tl-axis"><div class="tl-time">${ev.start}</div><div class="tl-dot" style="background:${ev.color}"></div></div>
       <div class="tl-block" id="ov-ev-${i}" style="border-left-color:${ev.color};min-height:${bh2}px"
-           onclick="activeIdx=${i};showTab(2);setTimeout(()=>snapTo(${i},true),60)">
+           onclick="haptic('light');activeIdx=${i};showTab(2);setTimeout(()=>snapTo(${i},true),60)">
         <div class="tl-in">
           <div class="tl-head"><span class="tl-ico">${ev.icon}</span><span class="tl-name">${ev.name}</span></div>
           <div class="tl-pills">
@@ -981,6 +974,7 @@ function slideCards(idx,anim){
   document.querySelectorAll('.ev-card').forEach((c,i)=>c.classList.toggle('on',i===idx));
 }
 function snapTo(idx,anim=true){
+  if(idx!==activeIdx) haptic('light');
   activeIdx=idx;
   renderThumb(idxToPx(idx)); renderTicks(idx); slideCards(idx,anim);
 }
@@ -1349,6 +1343,14 @@ function initTimebarHighlight(){
   sc.addEventListener('scroll',findVisible,{passive:true});
   requestAnimationFrame(findVisible);
 }
+
+function haptic(style='light'){
+  if(navigator.vibrate){
+    navigator.vibrate(style==='light'?8:style==='medium'?15:25);
+  }
+  // iOS: try AudioContext brief silent buffer as fallback (no-op if unsupported)
+}
+
 /* ══ DAY NAV ══ */
 const FILES=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day4_Complete.html'];
 const CURRENT_DAY=4;
@@ -1357,18 +1359,20 @@ function setDotProgress(p){
   for(let i=1;i<=4;i++){
     const el=document.getElementById('dot'+i);
     if(!el) continue;
+    el.style.transition='background .12s ease,transform .12s ease';
     if(i===CURRENT_DAY){
       const f=Math.min(Math.abs(p),1);
       el.style.background=`rgba(255,255,255,${1-f*0.6})`;
       el.style.transform=`scale(${1.4-f*0.35})`;
     } else {
       const td=p>0?CURRENT_DAY+1:CURRENT_DAY-1;
-      if(i===td&&Math.abs(p)>0.02){
+      if(i===td&&Math.abs(p)>0.01){
         const g=Math.min(Math.abs(p),1);
         el.style.background=`rgba(255,255,255,${0.32+g*0.68})`;
         el.style.transform=`scale(${1+g*0.45})`;
       } else {
-        el.style.background=''; el.style.transform='';
+        el.style.background='rgba(255,255,255,.32)';
+        el.style.transform='scale(1)';
       }
     }
   }
@@ -1377,8 +1381,14 @@ function resetDots(){
   for(let i=1;i<=4;i++){
     const el=document.getElementById('dot'+i);
     if(!el) continue;
-    el.style.background=''; el.style.transform='';
-    el.className='day-dot'+(i===CURRENT_DAY?' day-dot-on':'');
+    el.style.transition='background .25s ease,transform .25s ease';
+    if(i===CURRENT_DAY){
+      el.style.background='#fff';
+      el.style.transform='scale(1.4)';
+    } else {
+      el.style.background='rgba(255,255,255,.32)';
+      el.style.transform='scale(1)';
+    }
   }
 }
 
