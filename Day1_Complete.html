@@ -1454,40 +1454,94 @@ requestAnimationFrame(()=>requestAnimationFrame(()=>{
 window.addEventListener('resize',()=>{positionTicks();layoutCards();snapTo(activeIdx,false);});
 
 
-/* ══ DAY NAVIGATION ══ */
+
+
+/* ══ DAY NAVIGATION + LIVE HEADER SWIPE ══ */
+const FILES=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day4_Complete.html'];
+const CURRENT_DAY=1;
+
 function gotoDay(n){
-  if(n<1||n>4) return;
-  const files=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day4_Complete.html'];
-  if(n===1) return;
-  const dir=n>1?1:-1;  // 1=left slide, -1=right slide
-  const ov=document.getElementById('slideOverlay');
-  ov.style.transform=`translateX(${dir*100}%)`
-  ov.style.transition='none';
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      ov.style.transition='transform .32s cubic-bezier(.4,0,.2,1)';
-      ov.style.transform='translateX(0)';
-      ov.addEventListener('transitionend',()=>{ window.location.href=files[n-1]; },{once:true});
-    });
-  });
+  if(n<1||n>4||n===CURRENT_DAY) return;
+  const dir = n > CURRENT_DAY ? -1 : 1;   // -1 = slide hdr left (going forward), 1 = right (going back)
+  const hdr = document.querySelector('.hdr');
+  const ov  = document.getElementById('slideOverlay');
+
+  // Snap hdr off screen, fade in overlay, then navigate
+  hdr.style.transition = 'transform .28s cubic-bezier(.4,0,.2,1)';
+  hdr.style.transform  = `translateX(${dir * 100}%)`;
+
+  ov.style.transition = 'none';
+  ov.style.transform  = `translateX(${-dir * 100}%)`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    ov.style.transition = 'transform .28s cubic-bezier(.4,0,.2,1)';
+    ov.style.transform  = 'translateX(0)';
+    ov.addEventListener('transitionend', ()=>{ window.location.href=FILES[n-1]; }, {once:true});
+  }));
 }
 
-/* ── HEADER SWIPE ── */
 (function(){
-  const hdr=document.querySelector('.hdr');
-  let sx=0,sy=0,swiped=false;
-  hdr.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;swiped=false;},{passive:true});
-  hdr.addEventListener('touchend',e=>{
-    if(swiped)return;
-    const dx=e.changedTouches[0].clientX-sx;
-    const dy=e.changedTouches[0].clientY-sy;
-    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.5){
-      swiped=true;
-      if(dx<0) gotoDay(2);
-      else gotoDay(0);
+  const hdr = document.querySelector('.hdr');
+  let sx=0, sy=0, tracking=false, committed=false, axisLocked=null;
+  const W = ()=>window.innerWidth;
+
+  hdr.addEventListener('touchstart', e=>{
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    tracking = true; committed = false; axisLocked = null;
+    hdr.style.transition = 'none';
+  }, {passive:true});
+
+  hdr.addEventListener('touchmove', e=>{
+    if(!tracking || committed) return;
+    const dx = e.touches[0].clientX - sx;
+    const dy = e.touches[0].clientY - sy;
+
+    // Lock axis on first significant movement
+    if(!axisLocked && (Math.abs(dx)>6||Math.abs(dy)>6)){
+      axisLocked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
     }
-  },{passive:true});
+    if(axisLocked !== 'x') return;
+
+    // Clamp: can only swipe in valid direction
+    const canLeft  = CURRENT_DAY < 4;   // swipe left = next day
+    const canRight = CURRENT_DAY > 1;   // swipe right = prev day
+    let clamped = dx;
+    if(dx < 0 && !canLeft)  clamped = dx * 0.15;  // resist
+    if(dx > 0 && !canRight) clamped = dx * 0.15;
+
+    // Dampen past 40% of screen
+    const damp = Math.abs(clamped) > W()*0.4
+      ? Math.sign(clamped)*(W()*0.4 + (Math.abs(clamped)-W()*0.4)*0.2)
+      : clamped;
+
+    hdr.style.transform = `translateX(${damp}px)`;
+  }, {passive:true});
+
+  hdr.addEventListener('touchend', e=>{
+    if(!tracking) return;
+    tracking = false;
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+
+    if(axisLocked !== 'x' || Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)*1.5){
+      // Snap back
+      hdr.style.transition = 'transform .22s cubic-bezier(.4,0,.2,1)';
+      hdr.style.transform  = 'translateX(0)';
+      return;
+    }
+    committed = true;
+    const targetDay = dx < 0 ? CURRENT_DAY+1 : CURRENT_DAY-1;
+    if(targetDay < 1 || targetDay > 4){
+      hdr.style.transition = 'transform .22s cubic-bezier(.4,0,.2,1)';
+      hdr.style.transform  = 'translateX(0)';
+      return;
+    }
+    // Let gotoDay take over — it will continue the motion
+    hdr.style.transform = 'translateX(0)';  // reset so gotoDay animates cleanly
+    gotoDay(targetDay);
+  }, {passive:true});
 })();
+
 </script>
 </body>
 </html>
