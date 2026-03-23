@@ -651,7 +651,18 @@ function openNav(pid){const i=EVS.findIndex(e=>e.pid===pid);if(i>=0)openGM(i,'na
    TAB 0 — OVERVIEW
 ══════════════════════════════════ */
 function scrollToOvEvent(i){
-  const el=document.getElementById(`ov-ev-${i}`);
+  const el=document.getElementById('ov-ev-'+i);
+  const sc=document.getElementById('ovScroll');
+  if(!el||!sc) return;
+  showTab(0);
+  setTimeout(()=>{
+    const elTop=el.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop;
+    const center=elTop - sc.clientHeight/2 + el.offsetHeight/2;
+    sc.scrollTo({top:Math.max(0,center),behavior:'smooth'});
+    el.style.outline='3px solid #2563EB';
+    setTimeout(()=>el.style.outline='',900);
+  },80);
+}`);
   const sc=document.getElementById('ovScroll');
   if(!el||!sc) return;
   showTab(0);
@@ -707,6 +718,15 @@ function buildOverview(){
   er.innerHTML=`<div class="tl-axis"><div class="tl-time">21:30</div><div class="tl-dot" style="background:#94A3B8"></div></div><div style="padding:8px 10px;font-size:11px;color:#94A3B8;font-weight:600">✅ Day 3 완료</div>`;
   tl.appendChild(er);
   wrap.appendChild(tl);
+
+  // top/bottom spacers so first/last items can reach scroll center
+  const topSpacer=document.createElement('div');
+  topSpacer.id='ov-top-spacer'; topSpacer.style.height='0';
+  wrap.insertBefore(topSpacer, tbOuter||wrap.firstChild);
+
+  const btmSpacer=document.createElement('div');
+  btmSpacer.id='ov-btm-spacer'; btmSpacer.style.height='0';
+  wrap.appendChild(btmSpacer);
 }
 
 /* ══════════════════════════════════
@@ -1358,6 +1378,7 @@ document.getElementById('ceOverlay').addEventListener('click',e=>{
 ══════════════════════════════════ */
 buildOverview();
 initTimebarHighlight();
+initOvSpacers();
 buildSchedule();
 buildTicks();
 requestAnimationFrame(()=>requestAnimationFrame(initCardScrollHints));
@@ -1542,6 +1563,18 @@ function gotoDay(n){
   DOT_AREA.addEventListener('touchend',e=>{ e.stopPropagation(); endDrag(true); },{passive:true});
   DOT_AREA.addEventListener('touchcancel',()=>endDrag(false));
 })();
+
+
+function initOvSpacers(){
+  const sc=document.getElementById('ovScroll');
+  const top=document.getElementById('ov-top-spacer');
+  const btm=document.getElementById('ov-btm-spacer');
+  if(!sc||!top||!btm) return;
+  // half the visible scroll area, so first/last item can center
+  const h=Math.floor(sc.clientHeight/2);
+  top.style.height=h+'px';
+  btm.style.height=h+'px';
+}
 
 </script>
 </body>
