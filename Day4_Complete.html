@@ -541,7 +541,8 @@ const EVS=[
 /* ══ CONSTANTS ══ */
 const N=EVS.length;
 document.getElementById('hdrTitle').textContent='체크아웃 → SEA-TAC';
-document.getElementById('hdrSub').textContent='April 18 (Sat) · '+N+' stops';, T_START=9*60, T_END=12.5*60, T_SPAN=T_END-T_START;
+document.getElementById('hdrSub').textContent='April 18 (Sat) · '+N+' stops';
+const T_START=9*60, T_END=12.5*60, T_SPAN=T_END-T_START;
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function durLabel(m){return m<60?`${m}분`:m%60===0?`${m/60}시간`:`${Math.floor(m/60)}시간 ${m%60}분`;}
 function eRatio(ev){return(toMin(ev.start)-T_START)/T_SPAN;}
