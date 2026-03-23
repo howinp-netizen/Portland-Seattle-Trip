@@ -24,15 +24,15 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .panel.on{visibility:visible;z-index:10}
 
 /* ══════════ TAB 0 — OVERVIEW ══════════ */
-.ov-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px 32px;background:#F1F5F9}
+.ov-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px 32px;background:#F1F5F9}
 .ov-banner{background:linear-gradient(120deg,#1E3A8A,#2563EB);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;color:#fff}
 .ov-d{font-size:26px;font-weight:900;line-height:1}
 .ov-dt{font-size:12px;font-weight:800}
 .ov-ds{font-size:10px;opacity:.75;margin-top:2px}
 .timebar-wrap{background:#fff;border-radius:10px;padding:10px 14px;margin-bottom:10px}
 .timebar-lbl{font-size:9px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-.timebar{display:flex;height:18px;border-radius:5px;overflow:hidden;gap:1px}
-.timebar-seg{cursor:pointer;transition:opacity .15s;min-width:3px}
+.timebar{display:flex;height:22px;border-radius:6px;overflow:visible;gap:1px;position:relative}
+.timebar-seg{cursor:pointer;transition:opacity .2s,transform .2s,box-shadow .2s,filter .2s;min-width:3px;opacity:.75;border-radius:3px;position:relative}
 .timebar-seg:active{opacity:.7}
 .timebar-ends{display:flex;justify-content:space-between;margin-top:3px}
 .timebar-end{font-size:8px;color:#94A3B8;font-weight:600}
@@ -318,21 +318,18 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .hdr-info{flex:1;min-width:0}
 
 /* ── HEADER LAYOUT ── */
-.hdr-dots-wrap{display:flex;justify-content:center;padding:5px 0 2px}
-.hdr-dots{display:flex;gap:10px;align-items:center}
-.day-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.32);
-  transition:background .2s,transform .2s;cursor:pointer;
-  padding:8px;box-sizing:content-box;margin:-8px}
-.day-dot-on{background:#fff!important;transform:scale(1.4)!important}
-.day-dot-press{background:rgba(255,255,255,.9)!important;transform:scale(1.8)!important}
-.day-dot-peek{background:rgba(255,255,255,.65)!important;transform:scale(1.3)!important}
+.hdr-dots-wrap{display:flex;justify-content:center;padding:4px 0 3px}
+.hdr-dots{display:flex;gap:14px;align-items:center}
+.day-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.32);transition:background .2s ease,transform .2s ease,width .2s ease,height .2s ease;cursor:pointer;flex-shrink:0}
+.day-dot-on{width:9px!important;height:9px!important;background:#fff!important;margin:-2px}
+.day-dot-press{width:11px!important;height:11px!important;background:rgba(255,255,255,.9)!important;margin:-3px}
+.day-dot-peek{width:7px!important;height:7px!important;background:rgba(255,255,255,.65)!important;margin:-1px}
 .hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .hdr-info{flex:1;min-width:0}
 
 /* ── STICKY TIMEBAR ── */
-#stickyTimebar{position:sticky;top:0;z-index:50;background:#F1F5F9;padding:6px 12px 4px;margin:-10px -12px 8px;border-bottom:1px solid #E2E8F0}
-.timebar-seg-hl{outline:2px solid rgba(0,0,0,.22);outline-offset:-1px;opacity:1!important;
-  filter:brightness(1.15)}
+#stickyTimebar{position:sticky;top:0;z-index:50;background:#F1F5F9;padding:8px 0 6px;border-bottom:1px solid #E2E8F0;margin-bottom:8px}
+.timebar-seg-hl{opacity:1!important;transform:scaleY(1.3) translateY(-1.5px);transform-origin:bottom;box-shadow:0 0 0 1.5px rgba(255,255,255,.6),0 4px 10px rgba(0,0,0,.35)!important;filter:brightness(1.3) saturate(1.3)!important;z-index:10;border-radius:3px}
 
 /* ── PANELS / OVERLAY ── */
 #slideOverlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;pointer-events:none;
@@ -351,7 +348,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .sc-desc{font-size:15px!important;line-height:1.6}
 
 /* ── SCROLLBARS ── */
-.card-body{padding:11px 14px 52px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+.card-body{padding:11px 14px 52px;flex:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;
   min-height:0;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent}
 .card-body::-webkit-scrollbar{width:4px}
 .card-body::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px}
@@ -1529,39 +1526,35 @@ const FILES=['Day1_Complete.html','Day2_Complete.html','Day3_Complete.html','Day
 const CURRENT_DAY=1;
 
 function setDotProgress(p){
+  const abs=Math.min(Math.abs(p),1);
+  const td=p>0?CURRENT_DAY+1:CURRENT_DAY-1;
   for(let i=1;i<=4;i++){
     const el=document.getElementById('dot'+i);
     if(!el) continue;
-    el.style.transition='background .12s ease,transform .12s ease';
     if(i===CURRENT_DAY){
-      const f=Math.min(Math.abs(p),1);
-      el.style.background=`rgba(255,255,255,${1-f*0.6})`;
-      el.style.transform=`scale(${1.4-f*0.35})`;
+      const s=9-abs*4;  // 9px → 5px as we drag away
+      el.style.width=s+'px'; el.style.height=s+'px';
+      el.style.margin=(-((s-5)/2))+'px';
+      el.style.background=`rgba(255,255,255,${1-abs*0.6})`;
+    } else if(i===td&&abs>0.01){
+      const s=5+abs*3;  // 5px → 8px as target
+      el.style.width=s+'px'; el.style.height=s+'px';
+      el.style.margin=(-((s-5)/2))+'px';
+      el.style.background=`rgba(255,255,255,${0.32+abs*0.55})`;
     } else {
-      const td=p>0?CURRENT_DAY+1:CURRENT_DAY-1;
-      if(i===td&&Math.abs(p)>0.01){
-        const g=Math.min(Math.abs(p),1);
-        el.style.background=`rgba(255,255,255,${0.32+g*0.68})`;
-        el.style.transform=`scale(${1+g*0.45})`;
-      } else {
-        el.style.background='rgba(255,255,255,.32)';
-        el.style.transform='scale(1)';
-      }
+      el.style.width='5px'; el.style.height='5px';
+      el.style.margin='0';
+      el.style.background='rgba(255,255,255,.32)';
     }
+    el.style.transform='none';
   }
 }
 function resetDots(){
   for(let i=1;i<=4;i++){
     const el=document.getElementById('dot'+i);
     if(!el) continue;
-    el.style.transition='background .25s ease,transform .25s ease';
-    if(i===CURRENT_DAY){
-      el.style.background='#fff';
-      el.style.transform='scale(1.4)';
-    } else {
-      el.style.background='rgba(255,255,255,.32)';
-      el.style.transform='scale(1)';
-    }
+    el.style.cssText='';  // clear all inline styles, let CSS classes take over
+    el.className='day-dot'+(i===CURRENT_DAY?' day-dot-on':'');
   }
 }
 
