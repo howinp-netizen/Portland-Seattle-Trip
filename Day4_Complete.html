@@ -589,20 +589,13 @@ function scrollToOvEvent(i){
   if(!el||!sc) return;
   showTab(0);
   setTimeout(()=>{
-    const elTop=el.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop;
+    const scRect=sc.getBoundingClientRect();
+    const elRect=el.getBoundingClientRect();
+    const elTop=elRect.top - scRect.top + sc.scrollTop;
     const center=elTop - sc.clientHeight/2 + el.offsetHeight/2;
     sc.scrollTo({top:Math.max(0,center),behavior:'smooth'});
     el.style.outline='3px solid #2563EB';
-    setTimeout(()=>el.style.outline='',900);
-  },80);
-}`);
-  const sc=document.getElementById('ovScroll');
-  if(!el||!sc) return;
-  showTab(0);
-  setTimeout(()=>{
-    sc.scrollTo({top:el.getBoundingClientRect().top+sc.scrollTop-20,behavior:'smooth'});
-    el.style.outline='3px solid #2563EB';
-    setTimeout(()=>el.style.outline='',800);
+    setTimeout(()=>{ el.style.outline=''; },900);
   },80);
 }
 
