@@ -24,7 +24,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .panel.on{visibility:visible;z-index:10}
 
 /* ══════════ TAB 0 — OVERVIEW ══════════ */
-.ov-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px 32px;background:#F1F5F9}
+.ov-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px 32px;background:#F1F5F9;overscroll-behavior-y:auto}
 .ov-banner{background:linear-gradient(120deg,#1E3A8A,#2563EB);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;color:#fff}
 .ov-d{font-size:26px;font-weight:900;line-height:1}
 .ov-dt{font-size:12px;font-weight:800}
@@ -318,17 +318,17 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 .hdr-info{flex:1;min-width:0}
 
 /* ── HEADER LAYOUT ── */
-.hdr-dots-wrap{display:flex;justify-content:center;padding:4px 0 3px}
-.hdr-dots{display:flex;gap:14px;align-items:center}
-.day-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.32);transition:background .2s ease,transform .2s ease,width .2s ease,height .2s ease;cursor:pointer;flex-shrink:0}
-.day-dot-on{width:9px!important;height:9px!important;background:#fff!important;margin:-2px}
-.day-dot-press{width:11px!important;height:11px!important;background:rgba(255,255,255,.9)!important;margin:-3px}
-.day-dot-peek{width:7px!important;height:7px!important;background:rgba(255,255,255,.65)!important;margin:-1px}
+.hdr-dots-wrap{display:flex;justify-content:center;height:18px;align-items:center}
+.hdr-dots{display:flex;gap:14px;align-items:center;height:18px}
+.day-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.32);transition:background .2s ease,width .2s ease,height .2s ease,transform .2s ease;cursor:pointer;flex-shrink:0}
+.day-dot-on{width:9px!important;height:9px!important;background:#fff!important;transform:translate(-2px,-2px)!important}
+.day-dot-press{width:11px!important;height:11px!important;background:rgba(255,255,255,.9)!important;transform:translate(-3px,-3px)!important}
+.day-dot-peek{width:7px!important;height:7px!important;background:rgba(255,255,255,.65)!important;transform:translate(-1px,-1px)!important}
 .hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .hdr-info{flex:1;min-width:0}
 
 /* ── STICKY TIMEBAR ── */
-#stickyTimebar{position:sticky;top:0;z-index:50;background:#F1F5F9;padding:8px 0 6px;border-bottom:1px solid #E2E8F0;margin-bottom:8px}
+#stickyTimebar{background:#F1F5F9;padding:8px 12px 6px;border-bottom:1px solid #E2E8F0;flex-shrink:0}
 .timebar-seg-hl{opacity:1!important;transform:scaleY(1.3) translateY(-1.5px);transform-origin:bottom;box-shadow:0 0 0 1.5px rgba(255,255,255,.6),0 4px 10px rgba(0,0,0,.35)!important;filter:brightness(1.3) saturate(1.3)!important;z-index:10;border-radius:3px}
 
 /* ── PANELS / OVERLAY ── */
@@ -337,7 +337,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
   transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1)}
 
 /* ── CARD FONTS ── */
-.card-desc{font-size:15px!important;line-height:1.7;margin-bottom:10px}
+.card-desc{font-size:15px!important;line-height:1.45;margin-bottom:10px}
 .hl-row{font-size:15px!important;line-height:1.6}
 .ce-body .hl-row{font-size:15px!important;line-height:1.6}
 .ce-body .card-desc{font-size:15px!important;line-height:1.7}
@@ -349,7 +349,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 
 /* ── SCROLLBARS ── */
 .card-body{padding:11px 14px 52px;flex:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;
-  min-height:0;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent}
+  min-height:0;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent}
 .card-body::-webkit-scrollbar{width:4px}
 .card-body::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px}
 .ce-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;
@@ -362,6 +362,12 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
   background:linear-gradient(transparent,rgba(255,255,255,.95));
   pointer-events:none;border-radius:0 0 4px 4px;transition:opacity .2s}
 .card-body-wrap.scrolled-end::after{opacity:0}
+
+/* ── OV EVENT HIGHLIGHT ── */
+.tl-block{transition:transform .2s ease,box-shadow .2s ease}
+.tl-block-hl{transform:scale(1.025) translateX(2px)!important;
+  box-shadow:0 3px 14px rgba(37,99,235,.18)!important;
+  border-left-width:5px!important;z-index:2;position:relative}
 </style>
 </head>
 <body>
@@ -387,7 +393,8 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,"Noto Sans KR",s
 
 <div class="panels">
   <!-- TAB 0: OVERVIEW -->
-  <div class="panel on" id="pan0">
+  <div class="panel on" id="pan0" style="flex-direction:column;display:flex">
+    <div id="timebarSlot"></div>
     <div class="ov-scroll" id="ovScroll"></div>
   </div>
 
@@ -732,6 +739,7 @@ function showTab(n){
     if(!mapBuilt){buildMap();mapBuilt=true;}
     else mapGoTo(activeIdx);  // sync map to current event
   }
+  if(n===0){requestAnimationFrame(initOvSpacers);}
   if(n===2) requestAnimationFrame(()=>requestAnimationFrame(()=>{positionTicks();layoutCards();snapTo(activeIdx,false);initCardScrollHints();}));  // sync schedule
 }
 
@@ -762,11 +770,13 @@ function scrollToOvEvent(i){
   if(!el||!sc) return;
   showTab(0);
   setTimeout(()=>{
+    const tb=document.getElementById('stickyTimebar');
+    const tbH=tb?tb.offsetHeight:60;
     const scRect=sc.getBoundingClientRect();
-    const elRect=el.getBoundingClientRect();
-    const elTop=elRect.top - scRect.top + sc.scrollTop;
-    const center=elTop - sc.clientHeight/2 + el.offsetHeight/2;
-    sc.scrollTo({top:Math.max(0,center),behavior:'smooth'});
+    const elTop=el.getBoundingClientRect().top - scRect.top + sc.scrollTop;
+    // scroll so item top lands just below timebar (+ small gap)
+    const target=elTop - tbH - 6;
+    sc.scrollTo({top:Math.max(0,target),behavior:'smooth'});
     el.style.outline='3px solid #2563EB';
     setTimeout(()=>{ el.style.outline=''; },900);
   },80);
@@ -783,7 +793,9 @@ function buildOverview(){
     bh+=`<div class="timebar-seg" id="tseg-${i}" title="${ev.start} ${ev.name}" style="flex:${flex};background:${ev.color}" onclick="scrollToOvEvent(${i})"></div>`;
   });
   bh+=`</div><div class="timebar-ends"><span class="timebar-end">09:00</span><span class="timebar-end">21:30</span></div>`;
-  tb.innerHTML=bh; tbOuter.appendChild(tb); wrap.appendChild(tbOuter);
+  tb.innerHTML=bh; tbOuter.appendChild(tb);
+  const slot=document.getElementById('timebarSlot');
+  if(slot) slot.appendChild(tbOuter); else wrap.appendChild(tbOuter);
 
   // timeline rows
   const tl=document.createElement('div');tl.className='tl';
@@ -820,8 +832,7 @@ function buildOverview(){
 
   // top/bottom spacers so first/last items can reach scroll center
   const topSpacer=document.createElement('div');
-  topSpacer.id='ov-top-spacer'; topSpacer.style.height='0';
-  wrap.insertBefore(topSpacer, tbOuter||wrap.firstChild);
+  topSpacer.id='ov-top-spacer'; topSpacer.style.height='0'; // unused, kept for compat
 
   const btmSpacer=document.createElement('div');
   btmSpacer.id='ov-btm-spacer'; btmSpacer.style.height='0';
@@ -1201,13 +1212,16 @@ document.getElementById('trackArea').addEventListener('pointerdown',e=>{
   const col = document.getElementById('cardsCol');
   let sx=0, sy=0, locked=null;
 
+  let startedInBody=false;
   col.addEventListener('touchstart', e=>{
     sx = e.touches[0].clientX;
     sy = e.touches[0].clientY;
     locked = null;
+    startedInBody = !!e.target.closest('.card-body');
   }, {passive:true});
 
   col.addEventListener('touchmove', e=>{
+    if(startedInBody) return;  // let card-body handle its own scroll
     const dx = Math.abs(e.touches[0].clientX - sx);
     const dy = Math.abs(e.touches[0].clientY - sy);
     if(!locked){
@@ -1219,7 +1233,7 @@ document.getElementById('trackArea').addEventListener('pointerdown',e=>{
   }, {passive:false});
 
   col.addEventListener('touchend', e=>{
-    if(locked !== 'v') return;
+    if(startedInBody||locked !== 'v'){ locked=null; return; }
     const dy = e.changedTouches[0].clientY - sy;
     if(Math.abs(dy) > 50) navCard(activeIdx, dy < 0 ? 1 : -1);
     locked = null;
@@ -1502,31 +1516,69 @@ function initTimebarHighlight(){
   const sc=document.getElementById('ovScroll');
   if(!sc) return;
   let lastHl=-1;
+
   function highlightSeg(i){
     if(i===lastHl) return;
-    if(lastHl>=0){const o=document.getElementById('tseg-'+lastHl);if(o)o.classList.remove('timebar-seg-hl');}
-    const el=document.getElementById('tseg-'+i);
-    if(el)el.classList.add('timebar-seg-hl');
+    if(lastHl>=0){
+      const o=document.getElementById('tseg-'+lastHl); if(o) o.classList.remove('timebar-seg-hl');
+      const ob=document.getElementById('ov-ev-'+lastHl); if(ob) ob.classList.remove('tl-block-hl');
+    }
+    const el=document.getElementById('tseg-'+i); if(el) el.classList.add('timebar-seg-hl');
+    const bl=document.getElementById('ov-ev-'+i); if(bl) bl.classList.add('tl-block-hl');
     lastHl=i;
   }
+
+  // timebarSlot height = the offset from sc top where content starts
+  function getSlotH(){
+    const slot=document.getElementById('timebarSlot');
+    return slot ? slot.getBoundingClientRect().height : 60;
+  }
+
   function findVisible(){
-    // Near bottom? → highlight last event
-    if(sc.scrollTop+sc.clientHeight>=sc.scrollHeight-24){highlightSeg(EVS.length-1);return;}
-    // Otherwise: find the lowest event whose top edge is above the viewport midpoint
+    // sc coordinate system: scrollTop=0 means sc top
+    // element top relative to sc = getBoundingClientRect().top - sc.getBoundingClientRect().top
     const scTop=sc.getBoundingClientRect().top;
-    const mid=sc.clientHeight*0.5;
-    let best=0;
+    const threshold=getSlotH() + 8; // pixels from sc top where highlight zone starts
+
+    let found=-1;
     for(let i=0;i<EVS.length;i++){
       const el=document.getElementById('ov-ev-'+i);
       if(!el) continue;
-      const top=el.getBoundingClientRect().top-scTop;
-      if(top<=mid) best=i; else break;
+      const elTop=el.getBoundingClientRect().top - scTop;
+      // highlight the first element whose top is at or just below threshold
+      if(elTop <= threshold){ found=i; }
+      else { break; }
     }
-    highlightSeg(best);
+    // found = last item whose top is above threshold = topmost fully-entered item
+    if(found<0) found=0;
+    highlightSeg(found);
   }
-  sc.addEventListener('scroll',findVisible,{passive:true});
+
+  // Scroll limits
+  let rafId=null;
+  function clampScroll(){
+    const scTop=sc.getBoundingClientRect().top;
+    const slotH=getSlotH();
+    const last=document.getElementById('ov-ev-'+(EVS.length-1));
+    if(!last) return;
+
+    // MAX: only clamp when last card has scrolled ABOVE the timebar line
+    // i.e. lastTopSc < slotH + 4  (card top is above the threshold)
+    const lastTopSc=last.getBoundingClientRect().top - scTop;
+    if(lastTopSc < slotH){
+      const overshoot=slotH - lastTopSc;
+      if(rafId) cancelAnimationFrame(rafId);
+      rafId=requestAnimationFrame(()=>{
+        sc.scrollTop-=overshoot;
+        rafId=null;
+      });
+    }
+  }
+
+  sc.addEventListener('scroll',()=>{ clampScroll(); findVisible(); },{passive:true});
   requestAnimationFrame(findVisible);
 }
+
 
 function haptic(style='light'){
   if(navigator.vibrate){
@@ -1545,29 +1597,23 @@ function setDotProgress(p){
   for(let i=1;i<=4;i++){
     const el=document.getElementById('dot'+i);
     if(!el) continue;
+    let sz, bg, tr;
     if(i===CURRENT_DAY){
-      const s=9-abs*4;  // 9px → 5px as we drag away
-      el.style.width=s+'px'; el.style.height=s+'px';
-      el.style.margin=(-((s-5)/2))+'px';
-      el.style.background=`rgba(255,255,255,${1-abs*0.6})`;
+      sz=9-abs*4; bg=`rgba(255,255,255,${1-abs*0.6})`; tr=`translate(${-(sz-5)/2}px,${-(sz-5)/2}px)`;
     } else if(i===td&&abs>0.01){
-      const s=5+abs*3;  // 5px → 8px as target
-      el.style.width=s+'px'; el.style.height=s+'px';
-      el.style.margin=(-((s-5)/2))+'px';
-      el.style.background=`rgba(255,255,255,${0.32+abs*0.55})`;
+      sz=5+abs*3; bg=`rgba(255,255,255,${0.32+abs*0.55})`; tr=`translate(${-(sz-5)/2}px,${-(sz-5)/2}px)`;
     } else {
-      el.style.width='5px'; el.style.height='5px';
-      el.style.margin='0';
-      el.style.background='rgba(255,255,255,.32)';
+      sz=5; bg='rgba(255,255,255,.32)'; tr='none';
     }
-    el.style.transform='none';
+    el.style.width=sz+'px'; el.style.height=sz+'px';
+    el.style.background=bg; el.style.transform=tr;
   }
 }
 function resetDots(){
   for(let i=1;i<=4;i++){
     const el=document.getElementById('dot'+i);
     if(!el) continue;
-    el.style.cssText='';  // clear all inline styles, let CSS classes take over
+    el.removeAttribute('style');
     el.className='day-dot'+(i===CURRENT_DAY?' day-dot-on':'');
   }
 }
@@ -1665,14 +1711,17 @@ function gotoDay(n){
 
 
 function initOvSpacers(){
-  const sc=document.getElementById('ovScroll');
-  const top=document.getElementById('ov-top-spacer');
-  const btm=document.getElementById('ov-btm-spacer');
-  if(!sc||!top||!btm) return;
-  // half the visible scroll area, so first/last item can center
-  const h=Math.floor(sc.clientHeight/2);
-  top.style.height=h+'px';
-  btm.style.height=h+'px';
+  function apply(){
+    const sc=document.getElementById('ovScroll');
+    const btm=document.getElementById('ov-btm-spacer');
+    if(!sc||!btm) return;
+    const h=sc.clientHeight;
+    if(h<10){ requestAnimationFrame(apply); return; }
+    const tb=document.getElementById('stickyTimebar');
+    const tbH=tb?tb.offsetHeight:60;
+    btm.style.height=(h-tbH)+'px';
+  }
+  apply();
 }
 
 </script>
